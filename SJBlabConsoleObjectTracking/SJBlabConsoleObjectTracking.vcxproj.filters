@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="headers\BB.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\BBPredict.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\blob.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\BlobContour.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\BlobOperators.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\BlobProperties.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\BlobResult.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\Clustering.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\CMT.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\ComponentLabeling.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\Config.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\DetectionResult.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\DetectorCascade.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\EnsembleClassifier.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\FBTrack.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\ForegroundDetector.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\grammar.c">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\Gui.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\ImAcq.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\libconfig.c">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\Lk.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\Median.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\MedianFlowTracker.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\NNClassifier.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\scanctx.c">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\scanner.c">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\Settings.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\strbuf.c">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\TLD.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\TLDUtil.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\Trajectory.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\VarianceFilter.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\MainClass.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="headers\main.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="headers\BB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\BBPredict.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\blob.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\BlobContour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\BlobLibraryConfiguration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\BlobOperators.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\BlobProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\BlobResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Clustering.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\CMT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ComponentLabeling.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\DetectionResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\DetectorCascade.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\EnsembleClassifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\FBTrack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ForegroundDetector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\grammar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Gui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\ImAcq.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\IntegralImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\libconfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Lk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Median.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\MedianFlowTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\NNClassifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\NormalizedPatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\parsectx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\scanctx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\scanner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\strbuf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\TLD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\TLDUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Trajectory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\VarianceFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\wincompat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\MainClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="headers\config-sample.cfg">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="headers\libconfig.h++">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="headers\libconfigcpp.c++">
+      <Filter>Header Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>

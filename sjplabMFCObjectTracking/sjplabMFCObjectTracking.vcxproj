@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{63D6996A-C10E-4512-9738-C63A9E778EB6}</ProjectGuid>
+    <RootNamespace>sjplabMFCObjectTracking</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\opencv\mybuild\install\include;C:\work\sjplabMFCObjectTracking\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>C:\opencv\mybuild\install\x86\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_calib3d310d.lib;opencv_core310d.lib;opencv_features2d310d.lib;opencv_flann310d.lib;opencv_highgui310d.lib;opencv_imgcodecs310d.lib;opencv_imgproc310d.lib;opencv_ml310d.lib;opencv_objdetect310d.lib;opencv_photo310d.lib;opencv_shape310d.lib;opencv_stitching310d.lib;opencv_superres310d.lib;opencv_video310d.lib;opencv_videoio310d.lib;opencv_videostab310d.lib;opencv_xfeatures2d310d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\opencv\mybuild\install\include;C:\work\sjplabMFCObjectTracking\headers</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\opencv\mybuild\install\x86\vc14\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_calib3d310.lib;opencv_core310.lib;opencv_features2d310.lib;opencv_flann310.lib;opencv_highgui310.lib;opencv_imgcodecs310.lib;opencv_imgproc310.lib;opencv_ml310.lib;opencv_objdetect310.lib;opencv_photo310.lib;opencv_shape310.lib;opencv_stitching310.lib;opencv_superres310.lib;opencv_video310.lib;opencv_videoio310.lib;opencv_videostab310.lib;opencv_xfeatures2d310.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0412</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BCMenu.h" />
+    <ClInclude Include="BtnST.h" />
+    <ClInclude Include="headers\BB.h" />
+    <ClInclude Include="headers\BBPredict.h" />
+    <ClInclude Include="headers\blob.h" />
+    <ClInclude Include="headers\BlobContour.h" />
+    <ClInclude Include="headers\BlobLibraryConfiguration.h" />
+    <ClInclude Include="headers\BlobOperators.h" />
+    <ClInclude Include="headers\BlobProperties.h" />
+    <ClInclude Include="headers\BlobResult.h" />
+    <ClInclude Include="headers\Clustering.h" />
+    <ClInclude Include="headers\CMT.h" />
+    <ClInclude Include="headers\ComponentLabeling.h" />
+    <ClInclude Include="headers\Config.h" />
+    <ClInclude Include="headers\DetectionResult.h" />
+    <ClInclude Include="headers\DetectorCascade.h" />
+    <ClInclude Include="headers\EnsembleClassifier.h" />
+    <ClInclude Include="headers\FBTrack.h" />
+    <ClInclude Include="headers\ForegroundDetector.h" />
+    <ClInclude Include="headers\grammar.h" />
+    <ClInclude Include="headers\Gui.h" />
+    <ClInclude Include="headers\ImAcq.h" />
+    <ClInclude Include="headers\IntegralImage.h" />
+    <ClInclude Include="headers\libconfig.h" />
+    <ClInclude Include="headers\Lk.h" />
+    <ClInclude Include="headers\MainClass.h" />
+    <ClInclude Include="headers\Median.h" />
+    <ClInclude Include="headers\MedianFlowTracker.h" />
+    <ClInclude Include="headers\NNClassifier.h" />
+    <ClInclude Include="headers\NormalizedPatch.h" />
+    <ClInclude Include="headers\parsectx.h" />
+    <ClInclude Include="headers\scanctx.h" />
+    <ClInclude Include="headers\scanner.h" />
+    <ClInclude Include="headers\Settings.h" />
+    <ClInclude Include="headers\strbuf.h" />
+    <ClInclude Include="headers\TLD.h" />
+    <ClInclude Include="headers\TLDUtil.h" />
+    <ClInclude Include="headers\Trajectory.h" />
+    <ClInclude Include="headers\VarianceFilter.h" />
+    <ClInclude Include="headers\wincompat.h" />
+    <ClInclude Include="PicturePreview.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="sjplabMFCObjectTracking.h" />
+    <ClInclude Include="sjplabMFCObjectTrackingDlg.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BCMenu.cpp" />
+    <ClCompile Include="BtnST.cpp" />
+    <ClCompile Include="headers\BB.cpp" />
+    <ClCompile Include="headers\BBPredict.cpp" />
+    <ClCompile Include="headers\blob.cpp" />
+    <ClCompile Include="headers\BlobContour.cpp" />
+    <ClCompile Include="headers\BlobOperators.cpp" />
+    <ClCompile Include="headers\BlobProperties.cpp" />
+    <ClCompile Include="headers\BlobResult.cpp" />
+    <ClCompile Include="headers\Clustering.cpp" />
+    <ClCompile Include="headers\CMT.cpp" />
+    <ClCompile Include="headers\ComponentLabeling.cpp" />
+    <ClCompile Include="headers\Config.cpp" />
+    <ClCompile Include="headers\DetectionResult.cpp" />
+    <ClCompile Include="headers\DetectorCascade.cpp" />
+    <ClCompile Include="headers\EnsembleClassifier.cpp" />
+    <ClCompile Include="headers\FBTrack.cpp" />
+    <ClCompile Include="headers\ForegroundDetector.cpp" />
+    <ClCompile Include="headers\grammar.c" />
+    <ClCompile Include="headers\Gui.cpp" />
+    <ClCompile Include="headers\ImAcq.cpp" />
+    <ClCompile Include="headers\libconfig.c" />
+    <ClCompile Include="headers\Lk.cpp" />
+    <ClCompile Include="headers\MainClass.cpp" />
+    <ClCompile Include="headers\Median.cpp" />
+    <ClCompile Include="headers\MedianFlowTracker.cpp" />
+    <ClCompile Include="headers\NNClassifier.cpp" />
+    <ClCompile Include="headers\scanctx.c" />
+    <ClCompile Include="headers\scanner.c" />
+    <ClCompile Include="headers\Settings.cpp" />
+    <ClCompile Include="headers\strbuf.c" />
+    <ClCompile Include="headers\TLD.cpp" />
+    <ClCompile Include="headers\TLDUtil.cpp" />
+    <ClCompile Include="headers\Trajectory.cpp" />
+    <ClCompile Include="headers\VarianceFilter.cpp" />
+    <ClCompile Include="PicturePreview.cpp" />
+    <ClCompile Include="sjplabMFCObjectTracking.cpp" />
+    <ClCompile Include="sjplabMFCObjectTrackingDlg.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="sjplabMFCObjectTracking.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\cross.bmp" />
+    <Image Include="res\cross.png" />
+    <Image Include="res\linkedin-icon.bmp" />
+    <Image Include="res\linkedin-icon.png" />
+    <Image Include="res\plus.bmp" />
+    <Image Include="res\plus.png" />
+    <Image Include="res\sjplabMFCObjectTracking.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="headers\config-sample.cfg" />
+    <None Include="headers\libconfig.h++" />
+    <None Include="headers\libconfigcpp.c++" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="sjplabMFCObjectTracking.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
