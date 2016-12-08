@@ -1,3 +1,4 @@
+
 #include <jni.h>
 #include <string>
 #include <opencv2/opencv.hpp>
@@ -19,7 +20,7 @@ CMT * cmt=new CMT();
 long rect[4];
 
 jstring
-Java_com_sjp_sjplab_ocvtest2_MainActivity_stringFromJNI(
+Java_com_sjp_sjplab_sjplabandroidot_MainActivity_stringFromJNI(
         JNIEnv *env,
         jobject /* this */) {
     std::string hello = "Hello from C++";
@@ -29,7 +30,7 @@ Java_com_sjp_sjplab_ocvtest2_MainActivity_stringFromJNI(
 CascadeClassifier cascade;
 
 void
-Java_com_sjp_sjplab_ocvtest2_MainActivity_nativeDetectAndDisplay(
+Java_com_sjp_sjplab_sjplabandroidot_MainActivity_nativeDetectAndDisplay(
         JNIEnv *env,
         jobject,
         jlong addrMat) {
@@ -65,8 +66,8 @@ Java_com_sjp_sjplab_ocvtest2_MainActivity_nativeDetectAndDisplay(
 }
 
 void
-Java_com_sjp_sjplab_ocvtest2_MainActivity_OpenTLD(JNIEnv*, jobject, jlong addrGray, jlong addrRgba,
-                                                                                   jlong x, jlong y, jlong width, jlong height)
+Java_com_sjp_sjplab_sjplabandroidot_MainActivity_OpenTLD(JNIEnv*, jobject, jlong addrGray, jlong addrRgba,
+                                                  jlong x, jlong y, jlong width, jlong height)
 {
 
     if (etld!=NULL)
@@ -93,7 +94,7 @@ Java_com_sjp_sjplab_ocvtest2_MainActivity_OpenTLD(JNIEnv*, jobject, jlong addrGr
 }
 
 
-jintArray Java_com_sjp_sjplab_ocvtest2_MainActivity_getRect(JNIEnv *env, jobject)
+jintArray Java_com_sjp_sjplab_sjplabandroidot_MainActivity_getRect(JNIEnv *env, jobject)
 {
 
     jintArray result;
@@ -120,7 +121,7 @@ jintArray Java_com_sjp_sjplab_ocvtest2_MainActivity_getRect(JNIEnv *env, jobject
 
 
 void
-Java_com_sjp_sjplab_ocvtest2_MainActivity_ProcessTLD(JNIEnv*, jobject, jlong addrGray, jlong addrRgba)
+Java_com_sjp_sjplab_sjplabandroidot_MainActivity_ProcessTLD(JNIEnv*, jobject, jlong addrGray, jlong addrRgba)
 {
     Mat& mRgb = *(Mat*)addrRgba;
 
@@ -155,7 +156,7 @@ Java_com_sjp_sjplab_ocvtest2_MainActivity_ProcessTLD(JNIEnv*, jobject, jlong add
 }
 
 void
-Java_com_sjp_sjplab_ocvtest2_MainActivity_OpenCMT(JNIEnv*, jobject, jlong addrGray, jlong addrRgba,jlong x, jlong y, jlong width, jlong height)
+Java_com_sjp_sjplab_sjplabandroidot_MainActivity_OpenCMT(JNIEnv*, jobject, jlong addrGray, jlong addrRgba,jlong x, jlong y, jlong width, jlong height)
 {
 
 //	 if (cmt!=NULL)
@@ -170,7 +171,7 @@ Java_com_sjp_sjplab_ocvtest2_MainActivity_OpenCMT(JNIEnv*, jobject, jlong addrGr
 
     Point p1(x,y);
     Point p2(x+width,y+height);
- 
+
     CMTinitiated=false;
     if (cmt->initialise(temp, p1, p2))
         CMTinitiated=true;
@@ -178,7 +179,7 @@ Java_com_sjp_sjplab_ocvtest2_MainActivity_OpenCMT(JNIEnv*, jobject, jlong addrGr
 }
 
 void
-Java_com_sjp_sjplab_ocvtest2_MainActivity_ProcessCMT(JNIEnv*, jobject, jlong addrGray, jlong addrRgba)
+Java_com_sjp_sjplab_sjplabandroidot_MainActivity_ProcessCMT(JNIEnv*, jobject, jlong addrGray, jlong addrRgba)
 {
     if (!CMTinitiated)
         return;
@@ -201,7 +202,7 @@ Java_com_sjp_sjplab_ocvtest2_MainActivity_ProcessCMT(JNIEnv*, jobject, jlong add
 }
 
 jintArray
-Java_com_sjp_sjplab_ocvtest2_MainActivity_CMTgetRect(JNIEnv *env, jobject)
+Java_com_sjp_sjplab_sjplabandroidot_MainActivity_CMTgetRect(JNIEnv *env, jobject)
 {
 
     if (!CMTinitiated)
