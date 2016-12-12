@@ -179,12 +179,13 @@ Java_com_sjp_sjplab_sjplabandroidot_MainActivity_OpenCMT(JNIEnv*, jobject, jlong
 }
 
 void
-Java_com_sjp_sjplab_sjplabandroidot_MainActivity_ProcessCMT(JNIEnv*, jobject, jlong addrGray, jlong addrRgba)
+Java_com_sjp_sjplab_sjplabandroidot_MainActivity_ProcessCMT(JNIEnv*, jobject, jlong addrGray, jlong addrRgba, jlong addrRoiRgba)
 {
     if (!CMTinitiated)
         return;
     Mat& img  = *(Mat*)addrRgba;
     Mat& im_gray  = *(Mat*)addrGray;
+    Mat& im_roi = *(Mat*)addrRoiRgba;
 
     //gclee
     UMat temp;
@@ -192,12 +193,38 @@ Java_com_sjp_sjplab_sjplabandroidot_MainActivity_ProcessCMT(JNIEnv*, jobject, jl
 
     cmt->processFrame(temp);
 
+    if(cmt->hasResult) {
+
+        double px = (double) img.cols / (double) im_gray.cols;
+        double py = (double) img.rows / (double) im_gray.rows;
+
+        int roix, roiy, roiwidth, roiheight = 0;
+        roix = cmt->topLeft.x * px;
+        roiy = cmt->topLeft.y * py;
+        roiwidth = cmt->bottomRight.x * px - cmt->topLeft.x * px;
+        roiheight = cmt->bottomRight.y * py - cmt->topLeft.y * py;
+
+        if(roix >= 0 && roiwidth >= 0 && roix+roiwidth <= img.cols && roiy >=0 && roiheight >=0 && roiy+roiheight <= img.rows){
+            resize(im_roi, im_roi, cvSize(roiwidth, roiheight));
+            //double alpha = 0.0;
+            cv::Rect roi = cv::Rect(roix, roiy, roiwidth, roiheight);
+            cv::addWeighted(img(roi), 1, im_roi, 1, 0.0, img(roi));
+
+            CvPoint nPoint;
+            for (int i = 0; i < cmt->trackedKeypoints.size(); i++) {
+                nPoint.x = cmt->trackedKeypoints[i].first.pt.x * px;
+                nPoint.y = cmt->trackedKeypoints[i].first.pt.y * py;
+                cv::circle(img, nPoint, 3, cv::Scalar(255, 255, 255));
+            }
+        }
+
 //	        for(int i = 0; i<cmt->trackedKeypoints.size(); i++)
 //	            cv::circle(img, cmt->trackedKeypoints[i].first.pt, 3, cv::Scalar(255,255,255));
 //    cv::line(img, cmt->topLeft, cmt->topRight, cv::Scalar(255,255,255));
 //    cv::line(img, cmt->topRight, cmt->bottomRight, cv::Scalar(255,255,255));
 //    cv::line(img, cmt->bottomRight, cmt->bottomLeft, cv::Scalar(255,255,255));
 //    cv::line(img, cmt->bottomLeft, cmt->topLeft, cv::Scalar(255,255,255));
+    }
 
 }
 

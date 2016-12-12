@@ -1,13 +1,14 @@
 package com.sjp.sjplab.sjplabandroidot;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector.OnGestureListener;
@@ -17,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import org.opencv.android.CameraBridgeViewBase;
@@ -54,8 +56,10 @@ public class MainActivity extends AppCompatActivity
     private Mat mRgba;
     private Mat mGray;
     private Mat mRgba2;
+    private Mat mRoiRgba;
 
     private int mViewMode;
+    private int mSetViewMode = START_CMT;
     private int _canvasImgYOffset;
     private int _canvasImgXOffset;
     private MenuItem mItemPreviewRGBA;
@@ -67,8 +71,9 @@ public class MainActivity extends AppCompatActivity
     SurfaceHolder _holder;
     static boolean uno = true;
 
-    private boolean tracking = false;
-    private boolean isViewControl = false;
+    private Fragment fragment_control;
+    private boolean tracking_ready = false;
+    private boolean isViewControl = true;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -86,12 +91,17 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Bitmap myicon= BitmapFactory.decodeResource(getResources(),R.drawable.target_point_1); //target_point_small_1
+        mRoiRgba = new Mat();
+        Utils.bitmapToMat(myicon, mRoiRgba);
+
         mViewMode = VIEW_MODE_RGBA;
 
         mJavaCameraView = (JavaCameraView) findViewById(R.id.java_camera_view);
         if (mJavaCameraView != null) {
             mJavaCameraView.setVisibility(SurfaceView.VISIBLE);
             mJavaCameraView.setCvCameraViewListener(this);
+            //mJavaCameraView.disableFpsMeter();
         } else {
             Log.e(TAG, "onCreate: mJavaCameraView is null!");
         }
@@ -134,52 +144,61 @@ public class MainActivity extends AppCompatActivity
                             _trackedBox = new Rect(trackedBox1stCorner.get(), corner);
 
                             // view control pannel
-                            if(tracking == false){
+                            if(tracking_ready == false){
+
+                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
                                 if(!isViewControl){
-                                    //////////////////////////////////////////////////////////////////////
-                                    FragmentManager fm = getFragmentManager();
-                                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                                    fragmentTransaction.add(R.id.overlay_fragment_container, new FragmentConfig());
-                                    fragmentTransaction.commit();
-                                    //////////////////////////////////////////////////////////////////////
+                                    ft.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+                                    isViewControl = true;
+                                    ft.show(fragment_control);
+                                    ft.commit();
+                                }else{
+                                    ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+                                    isViewControl = false;
+                                    ft.hide(fragment_control);
+                                    ft.commit();
                                 }
+
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                return true;
+                            }else{
+                                if (_trackedBox.area() > 100) {
+                                    Log.i("TAG", "Tracked box DEFINED: " + _trackedBox);
+//                                    if (mViewMode == VIEW_MODE_FEATURES) {
+//                                        mViewMode = START_CMT;
+//                                        //_trackedBox = null;
+//                                        uno = true;
+//                                    }else {
+//                                        mViewMode = START_TLD;
+//                                        //_trackedBox = null;
+//                                        uno = true;
+//                                    }
+                                    mViewMode = mSetViewMode;
+                                } else
+                                    _trackedBox = null;
                             }
 
-                            if (_trackedBox.area() > 100) {
-                                Log.i("TAG", "Tracked box DEFINED: " + _trackedBox);
-//                                if (mViewMode == VIEW_MODE_FEATURES)
-//                                    mViewMode = START_TLD;
-//                                else
-//                                    mViewMode = START_CMT;
-                                if (mViewMode == VIEW_MODE_FEATURES) {
-                                    mViewMode = START_CMT;
-                                    //_trackedBox = null;
-                                    uno = true;
-                                }
-                                else {
-                                    mViewMode = START_TLD;
-                                     //_trackedBox = null;
-                                    uno = true;
-                                }
-
-                            } else
-                                _trackedBox = null;
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            final android.graphics.Rect rect = new android.graphics.Rect(
-                                    (int) trackedBox1stCorner.get().x
-                                            + _canvasImgXOffset,
-                                    (int) trackedBox1stCorner.get().y
-                                            + _canvasImgYOffset, (int) corner.x
-                                    + _canvasImgXOffset, (int) corner.y
-                                    + _canvasImgYOffset);
-                            final Canvas canvas = _holder.lockCanvas(rect);
-                            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); // remove
-                            // old
-                            // rectangle
-                            canvas.drawRect(rect, rectPaint);
-                            _holder.unlockCanvasAndPost(canvas);
+                            if(tracking_ready) {
+                                final android.graphics.Rect rect = new android.graphics.Rect(
+                                        (int) trackedBox1stCorner.get().x
+                                                + _canvasImgXOffset,
+                                        (int) trackedBox1stCorner.get().y
+                                                + _canvasImgYOffset, (int) corner.x
+                                        + _canvasImgXOffset, (int) corner.y
+                                        + _canvasImgYOffset);
+                                final Canvas canvas = _holder.lockCanvas(rect);
+                                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR); // remove
+                                // old
+                                // rectangle
+                                canvas.drawRect(rect, rectPaint);
+                                _holder.unlockCanvasAndPost(canvas);
+                            }
 
                             break;
                     }
@@ -188,6 +207,29 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
+
+        //////////////////////////////////////////////////////////////////////
+        fragment_control = new FragmentConfig();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.overlay_fragment_container, fragment_control);
+        ft.commit();
+        //////////////////////////////////////////////////////////////////////
+
+//        ImageButton button = (ImageButton) fragment_control.getView().findViewById(R.id.imageButton2);
+//        button.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v) {
+//                Context context = getApplicationContext();
+//                CharSequence text = "Hello toast!";
+//                int duration = Toast.LENGTH_SHORT;
+//
+//                Toast toast = Toast.makeText(context, text, duration);
+//                toast.show();
+//            }
+//
+//        });
+
 
     }
 
@@ -392,7 +434,7 @@ public class MainActivity extends AppCompatActivity
                     uno = false;
                 } else {
 
-                    ProcessCMT(mGray.getNativeObjAddr(), mRgba2.getNativeObjAddr());
+                    ProcessCMT(mGray.getNativeObjAddr(), mRgba.getNativeObjAddr(), mRoiRgba.getNativeObjAddr());
                     double px = (double) mRgba.width() / (double) mRgba2.width();
                     double py = (double) mRgba.height() / (double) mRgba2.height();
 
@@ -403,14 +445,14 @@ public class MainActivity extends AppCompatActivity
                         Point bottomLeft = new Point(l[4] * px, l[5] * py);
                         Point bottomRight = new Point(l[6] * px, l[7] * py);
 
-                        Imgproc.line(mRgba, topLeft, topRight, new Scalar(255, 255,
-                                255), 3);
-                        Imgproc.line(mRgba, topRight, bottomRight, new Scalar(255,
-                                255, 255), 3);
-                        Imgproc.line(mRgba, bottomRight, bottomLeft, new Scalar(255,
-                                255, 255), 3);
-                        Imgproc.line(mRgba, bottomLeft, topLeft, new Scalar(255, 255,
-                                255), 3);
+//                        Imgproc.line(mRgba, topLeft, topRight, new Scalar(255, 255,
+//                                255), 3);
+//                        Imgproc.line(mRgba, topRight, bottomRight, new Scalar(255,
+//                                255, 255), 3);
+//                        Imgproc.line(mRgba, bottomRight, bottomLeft, new Scalar(255,
+//                                255, 255), 3);
+//                        Imgproc.line(mRgba, bottomLeft, topLeft, new Scalar(255, 255,
+//                                255), 3);
 
                     }
                     uno = false;
@@ -504,7 +546,7 @@ public class MainActivity extends AppCompatActivity
     public native void OpenTLD(long matAddrGr, long matAddrRgba, long x, long y, long w, long h);
     public native void ProcessTLD(long matAddrGr, long matAddrRgba);
     public native void OpenCMT(long matAddrGr, long matAddrRgba, long x, long y, long w, long h);
-    public native void ProcessCMT(long matAddrGr, long matAddrRgba);
+    public native void ProcessCMT(long matAddrGr, long matAddrRgba,long matAddrRoiRgba);
     private static native int[] getRect();
     private static native int[] CMTgetRect();
 
@@ -560,6 +602,16 @@ public class MainActivity extends AppCompatActivity
         Toast mToast = Toast.makeText(getApplicationContext(), "Single Tap", Toast.LENGTH_SHORT);
         mToast.show();
         return true;
+    }
+
+    // public function
+    public void setTracking_ready(boolean bFlag){
+        tracking_ready = bFlag;
+    }
+
+    public void setmSetViewMode(int pViewMode){
+        mSetViewMode = pViewMode;
+        mViewMode = VIEW_MODE_RGBA;
     }
 
 }

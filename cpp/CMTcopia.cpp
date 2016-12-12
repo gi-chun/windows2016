@@ -570,7 +570,7 @@ std::vector<bool> in1d(const std::vector<int>& a, const std::vector<int>& b)
     return result;
 }
 
-void CMT::processFrame(cv::Mat im_gray)
+bool CMT::processFrame(cv::Mat im_gray)
 {
 	time_t t;
 	 char s[100];
@@ -748,6 +748,8 @@ void CMT::processFrame(cv::Mat im_gray)
     //time(&t);
     sprintf(s,"paso 12 %Ld",ticks_ms());
    	 ALOG(s, " ");
+
+    return hasResult;
 }
 /**********************************
  *

@@ -5,6 +5,18 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
 
+
+
+    <TextView
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:background="#10000000"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
     <ImageButton
         android:layout_width="65dp"
         android:layout_height="65dp"
@@ -13,43 +25,35 @@
         android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:id="@+id/imageButton2"
+        android:layout_marginRight="37dp"
+        android:layout_marginEnd="37dp"
         android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/radioButton"
-        android:layout_alignStart="@+id/radioButton" />
-
-    <RadioButton
-        android:text="normal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/radioButton"
-        android:layout_marginRight="14dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginTop="44dp"
-        android:layout_below="@+id/imageButton2"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textColor="#ffffff"/>
+        android:layout_alignParentEnd="true" />
 
-    <RadioButton
-        android:text="other"
+    <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/radioButton2"
-        android:duplicateParentState="true"
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/radioButton"
-        android:layout_alignLeft="@+id/radioButton"
-        android:layout_alignStart="@+id/radioButton"
-        android:textColor="#ffffff"/>
+        android:checkedButton="@+id/radioNormal"
+        android:layout_below="@+id/imageButton2"
+        android:layout_alignLeft="@+id/imageButton2"
+        android:layout_alignStart="@+id/imageButton2"
+        android:layout_marginTop="17dp">
 
-    <TextView
-        android:text="FPS: 25.25 test test test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:background="#10000000"
-        android:id="@+id/textView"
-        android:layout_marginTop="13dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        <RadioButton
+            android:text="normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioNormal"
+            android:textColor="#ffffff" />
+
+        <RadioButton
+            android:text="other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/radioOther"
+            android:textColor="#ffffff" />
+    </RadioGroup>
+
 </RelativeLayout>
