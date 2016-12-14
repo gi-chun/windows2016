@@ -133,6 +133,34 @@ CMT::CMT()
 
 bool CMT::initialise(cv::UMat im_gray0, cv::Point2f topleft, cv::Point2f bottomright)
 {
+    //gclee
+    cv::Rect roi = cv::Rect(topleft.x, topleft.y, bottomright.x-topleft.x, bottomright.y - topleft.y);
+    cv::Mat roiMat;
+    im_gray0(roi).copyTo(roiMat);
+    cv::Mat src_bin;
+    cv::threshold(roiMat, src_bin, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+    std::vector<std::vector <cv::Point> > contours;
+    cv::findContours(src_bin, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
+    double a, largest_area = 0.0;
+    unsigned largest_contour_index = 0;
+    for (unsigned i = 0; i < contours.size(); i++) {
+        double a = contourArea(contours[i], false);  //Find the largest area of contour
+        if (a>largest_area)
+        {
+            largest_area = a;
+            largest_contour_index = i;
+        }
+    }
+    std::vector<cv::Point> contours_poly;
+    cv::Rect boundRect;
+    cv::approxPolyDP(cv::Mat(contours[largest_contour_index]), contours_poly, 3, true);
+    boundRect = cv::boundingRect(cv::Mat(contours_poly));
+
+    topleft.x = boundRect.x + topleft.x;
+    topleft.y = boundRect.y + topleft.y;
+    bottomright.x = bottomright.x - (bottomright.x - (topleft.x+boundRect.width));
+    bottomright.y = bottomright.y - (bottomright.y - (topleft.y+boundRect.height));
+    //gclee end
 
     //Initialise detector, descriptor, matcher
     descriptorMatcher = cv::DescriptorMatcher::create(matcherType.c_str());

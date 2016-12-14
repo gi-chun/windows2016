@@ -1,7 +1,6 @@
 package com.sjp.sjplab.sjplabandroidot;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,7 +17,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import org.opencv.android.CameraBridgeViewBase;
@@ -31,6 +29,9 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity
     private Mat mRgba;
     private Mat mGray;
     private Mat mRgba2;
-    private Mat mRoiRgba;
+    //private Mat mRoiRgba;
 
     private int mViewMode;
     private int mSetViewMode = START_CMT;
@@ -75,6 +76,10 @@ public class MainActivity extends AppCompatActivity
     private boolean tracking_ready = false;
     private boolean isViewControl = true;
 
+    private static final long TIMEOUT = 1000L;
+    private BlockingQueue<Mat> frames = new LinkedBlockingQueue<Mat>();
+    private Thread worker;
+
     // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
@@ -91,9 +96,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Bitmap myicon= BitmapFactory.decodeResource(getResources(),R.drawable.target_point_1); //target_point_small_1
-        mRoiRgba = new Mat();
-        Utils.bitmapToMat(myicon, mRoiRgba);
+//        Bitmap myicon= BitmapFactory.decodeResource(getResources(),R.drawable.target_point_1); //target_point_small_1
+//        mRoiRgba = new Mat();
+//        Utils.bitmapToMat(myicon, mRoiRgba);
 
         mViewMode = VIEW_MODE_RGBA;
 
@@ -146,23 +151,23 @@ public class MainActivity extends AppCompatActivity
                             // view control pannel
                             if(tracking_ready == false){
 
-                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-                                if(!isViewControl){
-                                    ft.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
-                                    isViewControl = true;
-                                    ft.show(fragment_control);
-                                    ft.commit();
-                                }else{
-                                    ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
-                                    isViewControl = false;
-                                    ft.hide(fragment_control);
-                                    ft.commit();
-                                }
-
-                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//                                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//
+//                                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//
+//                                if(!isViewControl){
+//                                    ft.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
+//                                    isViewControl = true;
+//                                    ft.show(fragment_control);
+//                                    ft.commit();
+//                                }else{
+//                                    ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+//                                    isViewControl = false;
+//                                    ft.hide(fragment_control);
+//                                    ft.commit();
+//                                }
+//
+//                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                                 return true;
                             }else{
@@ -214,6 +219,30 @@ public class MainActivity extends AppCompatActivity
         ft.add(R.id.overlay_fragment_container, fragment_control);
         ft.commit();
         //////////////////////////////////////////////////////////////////////
+
+        worker = new Thread() {
+            @Override
+            public void run() {
+                while (true) { //running
+
+                    Mat inputFrame = null;
+
+                    try {
+                        inputFrame = frames.poll(TIMEOUT, TimeUnit.MILLISECONDS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (inputFrame == null) {
+                        // timeout. Also, with a try {} catch block poll can be interrupted via Thread.interrupt() so not to wait for the timeout.
+                        continue;
+                    }
+
+//                    cropToCenter(inputFrame);
+//                    String result = doImgProcessing(inputFrame);
+                }
+            }
+        };
 
 //        ImageButton button = (ImageButton) fragment_control.getView().findViewById(R.id.imageButton2);
 //        button.setOnClickListener(new View.OnClickListener()
@@ -291,6 +320,7 @@ public class MainActivity extends AppCompatActivity
 //        mRgba = inputFrame.rgba();
 //        nativeDetectAndDisplay(mRgba.getNativeObjAddr());
 //        return mRgba;
+
         final int viewMode = mViewMode;
 
         switch (viewMode) {
@@ -342,6 +372,13 @@ public class MainActivity extends AppCompatActivity
             case START_CMT: {
                 mRgba = inputFrame.rgba();
                 mGray = Reduce(inputFrame.gray());
+
+//                try {
+//                    frames.put(mGray);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+
                 double w = mGray.width();
                 double h = mGray.height();
                 if (_trackedBox == null)
@@ -376,7 +413,6 @@ public class MainActivity extends AppCompatActivity
                 mRgba = inputFrame.rgba();
                 mGray = inputFrame.gray();
                 mGray = TLD_Reduce(mGray);
-
                 mRgba2 = TLD_ReduceColor(mRgba);
 
                 // FindFeatures(mGray.getNativeObjAddr(), mRgba.getNativeObjAddr());
@@ -421,8 +457,15 @@ public class MainActivity extends AppCompatActivity
                 mRgba = inputFrame.rgba();
                 mGray = inputFrame.gray();
                 mGray = Reduce(mGray);
-
                 mRgba2 = ReduceColor(mRgba);
+
+                try {
+                    frames.put(mGray);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                worker.start();
 
                 // FindFeatures(mGray.getNativeObjAddr(), mRgba.getNativeObjAddr());
                 if (uno) {
@@ -434,27 +477,35 @@ public class MainActivity extends AppCompatActivity
                     uno = false;
                 } else {
 
-                    ProcessCMT(mGray.getNativeObjAddr(), mRgba.getNativeObjAddr(), mRoiRgba.getNativeObjAddr());
-                    double px = (double) mRgba.width() / (double) mRgba2.width();
-                    double py = (double) mRgba.height() / (double) mRgba2.height();
+//                    AsyncTask.execute(new Runnable(){
+//                        public void run() {
+//                            Mat grayTemp = new Mat(mGray.height(), mGray.width(), mGray.type());
+//                            mGray.copyTo(grayTemp);
+//                            ProcessCMT(grayTemp.getNativeObjAddr(), grayTemp.getNativeObjAddr());
+//                        }
+//                    });
 
-                    int[] l = CMTgetRect();
-                    if (l != null) {
-                        Point topLeft = new Point(l[0] * px, l[1] * py);
-                        Point topRight = new Point(l[2] * px, l[3] * py);
-                        Point bottomLeft = new Point(l[4] * px, l[5] * py);
-                        Point bottomRight = new Point(l[6] * px, l[7] * py);
+                    ProcessCMT(mGray.getNativeObjAddr(), mRgba.getNativeObjAddr());
 
-//                        Imgproc.line(mRgba, topLeft, topRight, new Scalar(255, 255,
-//                                255), 3);
-//                        Imgproc.line(mRgba, topRight, bottomRight, new Scalar(255,
-//                                255, 255), 3);
-//                        Imgproc.line(mRgba, bottomRight, bottomLeft, new Scalar(255,
-//                                255, 255), 3);
-//                        Imgproc.line(mRgba, bottomLeft, topLeft, new Scalar(255, 255,
-//                                255), 3);
+//                    double px = (double) mRgba.width() / (double) mRgba2.width();
+//                    double py = (double) mRgba.height() / (double) mRgba2.height();
 
-                    }
+//                    int[] l = CMTgetRect();
+//                    if (l != null) {
+//                        Point topLeft = new Point(l[0] * px, l[1] * py);
+//                        Point topRight = new Point(l[2] * px, l[3] * py);
+//                        Point bottomLeft = new Point(l[4] * px, l[5] * py);
+//                        Point bottomRight = new Point(l[6] * px, l[7] * py);
+//
+////                        Imgproc.line(mRgba, topLeft, topRight, new Scalar(255, 255,
+////                                255), 3);
+////                        Imgproc.line(mRgba, topRight, bottomRight, new Scalar(255,
+////                                255, 255), 3);
+////                        Imgproc.line(mRgba, bottomRight, bottomLeft, new Scalar(255,
+////                                255, 255), 3);
+////                        Imgproc.line(mRgba, bottomLeft, topLeft, new Scalar(255, 255,
+////                                255), 3);
+//                    }
                     uno = false;
 
                     // Mat mTemp=mRgba;
@@ -546,7 +597,7 @@ public class MainActivity extends AppCompatActivity
     public native void OpenTLD(long matAddrGr, long matAddrRgba, long x, long y, long w, long h);
     public native void ProcessTLD(long matAddrGr, long matAddrRgba);
     public native void OpenCMT(long matAddrGr, long matAddrRgba, long x, long y, long w, long h);
-    public native void ProcessCMT(long matAddrGr, long matAddrRgba,long matAddrRoiRgba);
+    public native void ProcessCMT(long matAddrGr, long matAddrRgba);
     private static native int[] getRect();
     private static native int[] CMTgetRect();
 
