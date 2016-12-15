@@ -31,7 +31,6 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity
     private static final int SWIPE_MAX_OFF_PATH = 250;
     private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
-    private static final String TAG = "OcvTest2";
+    private static final String TAG = "gclee";
     private static final int VIEW_MODE_RGBA = 0;
     private static final int VIEW_MODE_FEATURES = 5;
     private static final int VIEW_MODE_CMT = 8;
@@ -76,9 +75,11 @@ public class MainActivity extends AppCompatActivity
     private boolean tracking_ready = false;
     private boolean isViewControl = true;
 
-    private static final long TIMEOUT = 1000L;
-    private BlockingQueue<Mat> frames = new LinkedBlockingQueue<Mat>();
+    private static final long TIMEOUT = 1L; //1000L , 1, 25
+    private BlockingQueue<Mat> frames = new LinkedBlockingQueue<Mat>(1); // 11, 5, 3,
+//    private ConcurrentLinkedQueue<Mat> frames = new ConcurrentLinkedQueue<Mat>(); //
     private Thread worker;
+    private boolean workerStop = false;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -223,26 +224,40 @@ public class MainActivity extends AppCompatActivity
         worker = new Thread() {
             @Override
             public void run() {
+
                 while (true) { //running
 
                     Mat inputFrame = null;
 
-                    try {
-                        inputFrame = frames.poll(TIMEOUT, TimeUnit.MILLISECONDS);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        inputFrame = frames.poll(TIMEOUT, TimeUnit.MILLISECONDS);
+                        inputFrame = frames.poll();
+//                    } catch (InterruptedException e) {
+//                        Log.i(TAG, "thread interrupt ");
+//                        e.printStackTrace();
+//                    }
 
                     if (inputFrame == null) {
                         // timeout. Also, with a try {} catch block poll can be interrupted via Thread.interrupt() so not to wait for the timeout.
+                        Log.i(TAG, "thread inputframe null");
                         continue;
                     }
 
+
+                    if(workerStop){
+                        Log.i(TAG, "thread frames queue clear ");
+                        frames.clear();
+                    }else {
+                        Log.i(TAG, "thread image processing ");
+                        ProcessCMT(inputFrame.getNativeObjAddr(), inputFrame.getNativeObjAddr());
+                    }
 //                    cropToCenter(inputFrame);
 //                    String result = doImgProcessing(inputFrame);
                 }
+
             }
         };
+        worker.start();
 
 //        ImageButton button = (ImageButton) fragment_control.getView().findViewById(R.id.imageButton2);
 //        button.setOnClickListener(new View.OnClickListener()
@@ -327,6 +342,7 @@ public class MainActivity extends AppCompatActivity
             case VIEW_MODE_RGBA:
                 // input frame has RBGA format
                 mRgba = inputFrame.rgba();
+
                 break;
             case START_TLD: {
                 mRgba = inputFrame.rgba();
@@ -372,6 +388,7 @@ public class MainActivity extends AppCompatActivity
             case START_CMT: {
                 mRgba = inputFrame.rgba();
                 mGray = Reduce(inputFrame.gray());
+                workerStop = true;
 
 //                try {
 //                    frames.put(mGray);
@@ -457,21 +474,23 @@ public class MainActivity extends AppCompatActivity
                 mRgba = inputFrame.rgba();
                 mGray = inputFrame.gray();
                 mGray = Reduce(mGray);
-                mRgba2 = ReduceColor(mRgba);
+                //mRgba2 = ReduceColor(mRgba);
 
-                try {
-                    frames.put(mGray);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    frames.put(mGray);
+                    frames.offer(mGray);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
 
-                worker.start();
+                workerStop = false;
+//                worker.start();
 
                 // FindFeatures(mGray.getNativeObjAddr(), mRgba.getNativeObjAddr());
                 if (uno) {
                     int w = mGray.width();
                     int h = mGray.height();
-                    OpenCMT(mGray.getNativeObjAddr(), mRgba2.getNativeObjAddr(),
+                    OpenCMT(mGray.getNativeObjAddr(), mGray.getNativeObjAddr(),
                             (long) w - w / 4, (long) h / 2 - h / 4, (long) w / 2,
                             (long) h / 2);
                     uno = false;
@@ -485,27 +504,84 @@ public class MainActivity extends AppCompatActivity
 //                        }
 //                    });
 
-                    ProcessCMT(mGray.getNativeObjAddr(), mRgba.getNativeObjAddr());
+                    //ProcessCMT(mGray.getNativeObjAddr(), mRgba.getNativeObjAddr());
 
-//                    double px = (double) mRgba.width() / (double) mRgba2.width();
-//                    double py = (double) mRgba.height() / (double) mRgba2.height();
+                    double px = (double) mRgba.width() / (double) mGray.width();
+                    double py = (double) mRgba.height() / (double) mGray.height();
 
-//                    int[] l = CMTgetRect();
-//                    if (l != null) {
-//                        Point topLeft = new Point(l[0] * px, l[1] * py);
-//                        Point topRight = new Point(l[2] * px, l[3] * py);
-//                        Point bottomLeft = new Point(l[4] * px, l[5] * py);
-//                        Point bottomRight = new Point(l[6] * px, l[7] * py);
-//
-////                        Imgproc.line(mRgba, topLeft, topRight, new Scalar(255, 255,
-////                                255), 3);
-////                        Imgproc.line(mRgba, topRight, bottomRight, new Scalar(255,
-////                                255, 255), 3);
-////                        Imgproc.line(mRgba, bottomRight, bottomLeft, new Scalar(255,
-////                                255, 255), 3);
-////                        Imgproc.line(mRgba, bottomLeft, topLeft, new Scalar(255, 255,
-////                                255), 3);
-//                    }
+                    int[] l = CMTgetRect();
+                    if (l != null) {
+                        Point topLeft = new Point(l[0] * px, l[1] * py);
+                        Point topRight = new Point(l[2] * px, l[3] * py);
+                        Point bottomLeft = new Point(l[4] * px, l[5] * py);
+                        Point bottomRight = new Point(l[6] * px, l[7] * py);
+
+                        ////////////////////////////////////////////////////////////////////////
+                        int roix, roiy, roiwidth, roiheight = 0;
+                        roix = (int)topLeft.x;
+                        roiy = (int)topLeft.y;
+                        roiwidth = (int)(bottomRight.x  - topLeft.x);
+                        roiheight = (int)(bottomRight.y - topLeft.y);
+
+                        if(roix >= 0 && roiwidth >= 0 && roix+roiwidth <= mRgba.width() && roiy >=0 && roiheight >=0 && roiy+roiheight <= mRgba.height()){
+
+                            Rect roi = new Rect(roix, roiy, roiwidth, roiheight);
+                            int lineLength = 20;
+                            /* corners:
+                    * p1 - p2
+                    * |     |
+                    * p4 - p3
+                    */
+                            int cornerRadius = 10;
+                            Scalar lineColor = new Scalar(0, 255, 0);
+                            int thickness = 2;
+                            int lineType = 8;
+                            Point p1 = new Point(roi.x, roi.y);
+                            Point p2 = new Point (roi.x+roi.width, roi.y);
+                            Point p3 = new Point(roi.x+roi.width, roi.y+roi.height);
+                            Point p4 = new Point (roi.x, roi.y+roi.height);
+
+                            // draw straight lines
+                            Imgproc.line(mRgba, new Point(p1.x+cornerRadius,p1.y), new Point(p1.x+cornerRadius+lineLength,p1.y), lineColor, thickness, lineType, 0);
+                            Imgproc.line(mRgba, new Point (p2.x-cornerRadius-lineLength,p2.y), new Point (p2.x-cornerRadius,p2.y), lineColor, thickness, lineType, 0);
+
+                            Imgproc.line(mRgba, new Point (p2.x,p2.y+cornerRadius), new Point (p2.x,p2.y+cornerRadius+lineLength), lineColor, thickness, lineType, 0);
+                            Imgproc.line(mRgba, new Point (p3.x,p3.y-cornerRadius-lineLength), new Point (p3.x,p3.y-cornerRadius), lineColor, thickness, lineType, 0);
+
+                            Imgproc.line(mRgba, new Point (p4.x+cornerRadius,p4.y), new Point (p4.x+cornerRadius+lineLength,p4.y), lineColor, thickness, lineType, 0);
+                            Imgproc.line(mRgba, new Point (p3.x-cornerRadius-lineLength,p3.y), new Point (p3.x-cornerRadius,p3.y), lineColor, thickness, lineType, 0);
+
+                            Imgproc.line(mRgba, new Point (p1.x,p1.y+cornerRadius), new Point (p1.x,p1.y+cornerRadius+lineLength), lineColor, thickness, lineType, 0);
+                            Imgproc.line(mRgba, new Point (p4.x,p4.y-cornerRadius-lineLength), new Point (p4.x,p4.y-cornerRadius), lineColor, thickness, lineType, 0);
+
+                            // draw arcs
+                            org.opencv.core.Size sTemp = new org.opencv.core.Size(cornerRadius,cornerRadius);
+                            Imgproc.ellipse( mRgba, new Point(p1.x+cornerRadius, p1.y+cornerRadius), sTemp, 180.0, 0, 90, lineColor, thickness, lineType, 0);
+                            Imgproc.ellipse( mRgba, new Point(p2.x-cornerRadius, p2.y+cornerRadius), sTemp, 270.0, 0, 90, lineColor, thickness, lineType, 0);
+                            Imgproc.ellipse( mRgba, new Point(p3.x-cornerRadius, p3.y-cornerRadius), sTemp, 0.0, 0, 90, lineColor, thickness, lineType, 0);
+                            Imgproc.ellipse( mRgba, new Point(p4.x+cornerRadius, p4.y-cornerRadius), sTemp, 90.0, 0, 90, lineColor, thickness, lineType, 0);
+                            //////////////////////////////////////////////////////////////////////////////////////
+
+                            //draw some crosshairs around the object
+                            int x, y = 0;
+                            x = roi.x + roi.width / 2;
+                            y = roi.y + roi.height / 2;
+
+                            // public static void circle(Mat img, Point center, int radius, Scalar color, int thickness, int lineType, int shift)
+                            Imgproc.circle(mRgba, new Point(x, y), roi.width/5, new Scalar(0, 255, 0), 1, 1, 0);
+                            Imgproc.circle(mRgba, new Point(x, y), 3, new Scalar(255, 0, 0), -1);
+
+                        }
+                        ////////////////////////////////////////////////////////////////////////
+//                        Imgproc.line(mRgba, topLeft, topRight, new Scalar(255, 255,
+//                                255), 3);
+//                        Imgproc.line(mRgba, topRight, bottomRight, new Scalar(255,
+//                                255, 255), 3);
+//                        Imgproc.line(mRgba, bottomRight, bottomLeft, new Scalar(255,
+//                                255, 255), 3);
+//                        Imgproc.line(mRgba, bottomLeft, topLeft, new Scalar(255, 255,
+//                                255), 3);
+                    }
                     uno = false;
 
                     // Mat mTemp=mRgba;

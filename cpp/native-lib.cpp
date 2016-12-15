@@ -166,8 +166,8 @@ Java_com_sjp_sjplab_sjplabandroidot_MainActivity_OpenCMT(JNIEnv*, jobject, jlong
 //	 cmt = new CMT();
     cv::Mat& im_gray  = *(cv::Mat*)addrGray;
     //gclee
-    cv::UMat temp;
-    im_gray.copyTo(temp);
+//    cv::UMat temp;
+//    im_gray.copyTo(temp);
 
 //    //find largest_countour
 //    cv::Rect roi = cv::Rect(x, y, x+width, y+height);
@@ -206,7 +206,7 @@ Java_com_sjp_sjplab_sjplabandroidot_MainActivity_OpenCMT(JNIEnv*, jobject, jlong
     Point p2(x+width, y+height);
 
     CMTinitiated=false;
-    if (cmt->initialise(temp, p1, p2))
+    if (cmt->initialise(im_gray, p1, p2))
         CMTinitiated=true;
 
 }
@@ -216,14 +216,14 @@ Java_com_sjp_sjplab_sjplabandroidot_MainActivity_ProcessCMT(JNIEnv*, jobject, jl
 {
     if (!CMTinitiated)
         return;
-    Mat& img  = *(Mat*)addrRgba;
+    //Mat& img  = *(Mat*)addrRgba;
     Mat& im_gray  = *(Mat*)addrGray;
 //    Mat& im_roi = *(Mat*)addrRoiRgba;
     //gclee
-    UMat temp;
-    im_gray.copyTo(temp);
+//    UMat temp;
+//    im_gray.copyTo(temp);
 
-    cmt->processFrame(temp);
+    cmt->processFrame(im_gray);
 
 //    if(cmt->hasResult) {
 //
@@ -318,17 +318,18 @@ Java_com_sjp_sjplab_sjplabandroidot_MainActivity_CMTgetRect(JNIEnv *env, jobject
     jint fill[8];
 
     {
-
-        fill[0]=cmt->topLeft.x;
-        fill[1]=cmt->topLeft.y;
-        fill[2]=cmt->topRight.x;
-        fill[3]=cmt->topRight.y;
-        fill[4]=cmt->bottomLeft.x;
-        fill[5]=cmt->bottomLeft.y;
-        fill[6]=cmt->bottomRight.x;
-        fill[7]=cmt->bottomRight.y;
-        env->SetIntArrayRegion(result, 0, 8, fill);
-        return result;
+        if(cmt->hasResult) {
+            fill[0] = cmt->topLeft.x;
+            fill[1] = cmt->topLeft.y;
+            fill[2] = cmt->topRight.x;
+            fill[3] = cmt->topRight.y;
+            fill[4] = cmt->bottomLeft.x;
+            fill[5] = cmt->bottomLeft.y;
+            fill[6] = cmt->bottomRight.x;
+            fill[7] = cmt->bottomRight.y;
+            env->SetIntArrayRegion(result, 0, 8, fill);
+            return result;
+        }
     }
 
     return NULL;
