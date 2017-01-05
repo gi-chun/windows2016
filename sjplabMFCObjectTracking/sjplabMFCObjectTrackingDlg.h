@@ -50,4 +50,11 @@ public:
 	afx_msg void OnClickedConfig();
 	afx_msg void OnClickedObjtracking();
 	afx_msg void OnDestroy();
+	CStatic stSource;
+	CStatic stMethod;
+	CComboBox cbMethod;
+	CComboBox cbSource;
+	afx_msg void OnSelchangeComboMethod();
+	afx_msg void OnSelchangeComboSource();
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };

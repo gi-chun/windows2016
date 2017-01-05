@@ -41,8 +41,8 @@ void MainClass::doWork()
     
 	//gclee
 	VideoCapture cap(0); // open the default camera
-	cap.set(CV_CAP_PROP_FRAME_WIDTH, 1280); //640
-	cap.set(CV_CAP_PROP_FRAME_HEIGHT, 720); //480
+	//cap.set(CV_CAP_PROP_FRAME_WIDTH, 1280); //640
+	//cap.set(CV_CAP_PROP_FRAME_HEIGHT, 720); //480
 	//double fps = 50;
 	//cap.set(CV_CAP_PROP_FPS, fps);
 

@@ -54,7 +54,7 @@ void inout_rect(const std::vector<cv::KeyPoint>& keypoints, cv::Point2f topleft,
 }
 
 
-void track(cv::Mat im_prev, cv::Mat im_gray, const std::vector<std::pair<cv::KeyPoint, int> >& keypointsIN, std::vector<std::pair<cv::KeyPoint, int> >& keypointsTracked, std::vector<unsigned char>& status, int THR_FB)
+void track(cv::UMat im_prev, cv::UMat im_gray, const std::vector<std::pair<cv::KeyPoint, int> >& keypointsIN, std::vector<std::pair<cv::KeyPoint, int> >& keypointsTracked, std::vector<unsigned char>& status, int THR_FB)
 {
     //Status of tracked keypoint - True means successfully tracked
     status = std::vector<unsigned char>();
@@ -131,13 +131,13 @@ CMT::CMT()
 
 }
 
-bool CMT::initialise(cv::Mat im_gray0, cv::Point2f topleft, cv::Point2f bottomright)
+bool CMT::initialise(cv::UMat im_gray0, cv::Point2f topleft, cv::Point2f bottomright)
 {
     //gclee
     cv::Rect roi = cv::Rect(topleft.x, topleft.y, bottomright.x-topleft.x, bottomright.y - topleft.y);
-    cv::Mat roiMat;
+    cv::UMat roiMat;
     im_gray0(roi).copyTo(roiMat);
-    cv::Mat src_bin;
+    cv::UMat src_bin;
     cv::threshold(roiMat, src_bin, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
     std::vector<std::vector <cv::Point> > contours;
     cv::findContours(src_bin, contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
@@ -184,7 +184,7 @@ bool CMT::initialise(cv::Mat im_gray0, cv::Point2f topleft, cv::Point2f bottomri
     }
 
     //Remember keypoints that are not in the rectangle as background keypoints
-    cv::Mat background_features;
+    cv::UMat background_features;
     descriptorExtractor->compute(im_gray0, background_keypoints, background_features);
 
     //Assign each keypoint a class starting from 1, background is 0
@@ -196,7 +196,7 @@ bool CMT::initialise(cv::Mat im_gray0, cv::Point2f topleft, cv::Point2f bottomri
         backgroundClasses.push_back(0);
 
     //Stack background features and selected features into database
-    featuresDatabase = cv::Mat(background_features.rows+selectedFeatures.rows, std::max(background_features.cols,selectedFeatures.cols), background_features.type());
+    featuresDatabase = cv::UMat(background_features.rows+selectedFeatures.rows, std::max(background_features.cols,selectedFeatures.cols), background_features.type());
     if(background_features.cols > 0)
         background_features.copyTo(featuresDatabase(cv::Rect(0,0,background_features.cols, background_features.rows)));
     if(selectedFeatures.cols > 0)
@@ -564,7 +564,7 @@ std::vector<bool> in1d(const std::vector<int>& a, const std::vector<int>& b)
     return result;
 }
 
-void CMT::processFrame(cv::Mat im_gray)
+void CMT::processFrame(cv::UMat im_gray)
 {
     trackedKeypoints = std::vector<std::pair<cv::KeyPoint, int> >();
     std::vector<unsigned char> status;
@@ -579,7 +579,7 @@ void CMT::processFrame(cv::Mat im_gray)
 
     //Detect keypoints, compute descriptors
     std::vector<cv::KeyPoint> keypoints;
-    cv::Mat features;
+    cv::UMat features;
     detector->detect(im_gray, keypoints);
     descriptorExtractor->compute(im_gray, keypoints, features);
 
@@ -870,8 +870,8 @@ angles *
 //
 //    descriptorMatcher = cv::DescriptorMatcher::create(matcherType.c_str());
 //
-//    im_prev = cv::Mat();
-//    // featuresDatabase = cv::Mat();
+//    im_prev = cv::UMat();
+//    // featuresDatabase = cv::UMat();
 //
 //
 //    cv::FileStorage store(path, cv::FileStorage::READ);

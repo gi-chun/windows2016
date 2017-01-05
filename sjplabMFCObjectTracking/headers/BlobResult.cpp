@@ -1,9 +1,9 @@
 /************************************************************************
   			BlobResult.cpp
   			
-FUNCIONALITAT: Implementació de la classe CBlobResult
+FUNCIONALITAT: Implementaci?de la classe CBlobResult
 AUTOR: Inspecta S.L.
-MODIFICACIONS (Modificació, Autor, Data):
+MODIFICACIONS (Modificaci? Autor, Data):
  
 **************************************************************************/
 
@@ -25,15 +25,15 @@ MODIFICACIONS (Modificació, Autor, Data):
 
 
 /**
-- FUNCIÓ: CBlobResult
+- FUNCI? CBlobResult
 - FUNCIONALITAT: Constructor estandard.
 - PARÀMETRES:
 - RESULTAT:
 - Crea un CBlobResult sense cap blob
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 20-07-2004.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 20-07-2004.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /**
 - FUNCTION: CBlobResult
@@ -42,7 +42,7 @@ MODIFICACIONS (Modificació, Autor, Data):
 - RESULT:
 	- creates an empty set of blobs
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -52,25 +52,25 @@ CBlobResult::CBlobResult()
 }
 
 /**
-- FUNCIÓ: CBlobResult
+- FUNCI? CBlobResult
 - FUNCIONALITAT: Constructor a partir d'una imatge. Inicialitza la seqüència de blobs 
-			   amb els blobs resultants de l'anàlisi de blobs de la imatge.
+			   amb els blobs resultants de l'an?isi de blobs de la imatge.
 - PARÀMETRES:
 	- source: imatge d'on s'extreuran els blobs
-	- mask: màscara a aplicar. Només es calcularan els blobs on la màscara sigui 
-			diferent de 0. Els blobs que toquin a un pixel 0 de la màscara seran 
+	- mask: m?cara a aplicar. Nom? es calcularan els blobs on la m?cara sigui 
+			diferent de 0. Els blobs que toquin a un pixel 0 de la m?cara seran 
 			considerats exteriors.
-	- threshold: llindar que s'aplicarà a la imatge source abans de calcular els blobs
+	- threshold: llindar que s'aplicar?a la imatge source abans de calcular els blobs
 	- findmoments: indica si s'han de calcular els moments de cada blob
-	- blackBlobs: true per buscar blobs negres a la binaritzazió (it will join all extern white blobs).
-				  false per buscar blobs negres a la binaritzazió (it will join all extern black blobs).
+	- blackBlobs: true per buscar blobs negres a la binaritzazi?(it will join all extern white blobs).
+				  false per buscar blobs negres a la binaritzazi?(it will join all extern black blobs).
 
 - RESULTAT:
 	- objecte CBlobResult amb els blobs de la imatge source
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /**
 - FUNCTION: CBlob
@@ -88,7 +88,7 @@ CBlobResult::CBlobResult()
 	- object with all the blobs in the image. It throws an EXCEPCIO_CALCUL_BLOBS
 	  if some error appears in the BlobAnalysis function
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -109,17 +109,17 @@ CBlobResult::CBlobResult(IplImage *source, IplImage *mask, uchar backgroundColor
 }
 
 /**
-- FUNCIÓ: CBlobResult
-- FUNCIONALITAT: Constructor de còpia. Inicialitza la seqüència de blobs 
-			   amb els blobs del paràmetre.
+- FUNCI? CBlobResult
+- FUNCIONALITAT: Constructor de c?ia. Inicialitza la seqüència de blobs 
+			   amb els blobs del par?etre.
 - PARÀMETRES:
-	- source: objecte que es copiarà
+	- source: objecte que es copiar?
 - RESULTAT:
 	- objecte CBlobResult amb els blobs de l'objecte source
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /**
 - FUNCTION: CBlobResult
@@ -128,7 +128,7 @@ CBlobResult::CBlobResult(IplImage *source, IplImage *mask, uchar backgroundColor
 	- source: object to copy
 - RESULT:
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -136,7 +136,7 @@ CBlobResult::CBlobResult( const CBlobResult &source )
 {
 	m_blobs = Blob_vector( source.GetNumBlobs() );
 	
-	// creem el nou a partir del passat com a paràmetre
+	// creem el nou a partir del passat com a par?etre
 	m_blobs = Blob_vector( source.GetNumBlobs() );
 	// copiem els blobs de l'origen a l'actual
 	Blob_vector::const_iterator pBlobsSrc = source.m_blobs.begin();
@@ -144,7 +144,7 @@ CBlobResult::CBlobResult( const CBlobResult &source )
 
 	while( pBlobsSrc != source.m_blobs.end() )
 	{
-		// no podem cridar a l'operador = ja que Blob_vector és un 
+		// no podem cridar a l'operador = ja que Blob_vector ? un 
 		// vector de CBlob*. Per tant, creem un blob nou a partir del
 		// blob original
 		*pBlobsDst = new CBlob(**pBlobsSrc);
@@ -156,15 +156,15 @@ CBlobResult::CBlobResult( const CBlobResult &source )
 
 
 /**
-- FUNCIÓ: ~CBlobResult
+- FUNCI? ~CBlobResult
 - FUNCIONALITAT: Destructor estandard.
 - PARÀMETRES:
 - RESULTAT:
-	- Allibera la memòria reservada de cadascun dels blobs de la classe
+	- Allibera la mem?ia reservada de cadascun dels blobs de la classe
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /**
 - FUNCTION: ~CBlobResult
@@ -172,7 +172,7 @@ CBlobResult::CBlobResult( const CBlobResult &source )
 - PARAMETERS:
 - RESULT:
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -187,16 +187,16 @@ CBlobResult::~CBlobResult()
 
 
 /**
-- FUNCIÓ: operador =
+- FUNCI? operador =
 - FUNCIONALITAT: Assigna un objecte source a l'actual
 - PARÀMETRES:
 	- source: objecte a assignar
 - RESULTAT:
 	- Substitueix els blobs actuals per els de l'objecte source
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /**
 - FUNCTION: Assigment operator
@@ -204,13 +204,13 @@ CBlobResult::~CBlobResult()
 - PARAMETERS:
 - RESULT:
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
 CBlobResult& CBlobResult::operator=(const CBlobResult& source)
 {
-	// si ja són el mateix, no cal fer res
+	// si ja s? el mateix, no cal fer res
 	if (this != &source)
 	{
 		// alliberem el conjunt de blobs antic
@@ -219,7 +219,7 @@ CBlobResult& CBlobResult::operator=(const CBlobResult& source)
 			delete m_blobs[i];
 		}
 		m_blobs.clear();
-		// creem el nou a partir del passat com a paràmetre
+		// creem el nou a partir del passat com a par?etre
 		m_blobs = Blob_vector( source.GetNumBlobs() );
 		// copiem els blobs de l'origen a l'actual
 		Blob_vector::const_iterator pBlobsSrc = source.m_blobs.begin();
@@ -227,7 +227,7 @@ CBlobResult& CBlobResult::operator=(const CBlobResult& source)
 
 		while( pBlobsSrc != source.m_blobs.end() )
 		{
-			// no podem cridar a l'operador = ja que Blob_vector és un 
+			// no podem cridar a l'operador = ja que Blob_vector ? un 
 			// vector de CBlob*. Per tant, creem un blob nou a partir del
 			// blob original
 			*pBlobsDst = new CBlob(**pBlobsSrc);
@@ -240,17 +240,17 @@ CBlobResult& CBlobResult::operator=(const CBlobResult& source)
 
 
 /**
-- FUNCIÓ: operador +
+- FUNCI? operador +
 - FUNCIONALITAT: Concatena els blobs de dos CBlobResult
 - PARÀMETRES:
 	- source: d'on s'agafaran els blobs afegits a l'actual
 - RESULTAT:
 	- retorna un nou CBlobResult amb els dos CBlobResult concatenats
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- NOTA: per la implementació, els blobs del paràmetre es posen en ordre invers
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- NOTA: per la implementaci? els blobs del par?etre es posen en ordre invers
+- MODIFICACI? Data. Autor. Descripci?
 */
 /**
 - FUNCTION: + operator
@@ -260,7 +260,7 @@ CBlobResult& CBlobResult::operator=(const CBlobResult& source)
 - RESULT:
 	- object with the actual blobs and the source blobs
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -269,10 +269,10 @@ CBlobResult CBlobResult::operator+( const CBlobResult& source ) const
 	//creem el resultat a partir dels blobs actuals
 	CBlobResult resultat( *this );
 	
-	// reservem memòria per als nous blobs
+	// reservem mem?ia per als nous blobs
 	resultat.m_blobs.resize( resultat.GetNumBlobs() + source.GetNumBlobs() );
 
-	// declarem els iterador per recòrrer els blobs d'origen i desti
+	// declarem els iterador per rec?rer els blobs d'origen i desti
 	Blob_vector::const_iterator pBlobsSrc = source.m_blobs.begin();
 	Blob_vector::iterator pBlobsDst = resultat.m_blobs.end();
 
@@ -292,16 +292,16 @@ CBlobResult CBlobResult::operator+( const CBlobResult& source ) const
 **************************************************************************/
 
 /**
-- FUNCIÓ: AddBlob
+- FUNCI? AddBlob
 - FUNCIONALITAT: Afegeix un blob al conjunt
 - PARÀMETRES:
 	- blob: blob a afegir
 - RESULTAT:
 	- modifica el conjunt de blobs actual
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 2006/03/01
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 2006/03/01
+- MODIFICACI? Data. Autor. Descripci?
 */
 void CBlobResult::AddBlob( CBlob *blob )
 {
@@ -313,16 +313,16 @@ void CBlobResult::AddBlob( CBlob *blob )
 #ifdef MATRIXCV_ACTIU
 
 /**
-- FUNCIÓ: GetResult
+- FUNCI? GetResult
 - FUNCIONALITAT: Calcula el resultat especificat sobre tots els blobs de la classe
 - PARÀMETRES:
 	- evaluador: Qualsevol objecte derivat de COperadorBlob
 - RESULTAT:
 	- Retorna un array de double's amb el resultat per cada blob
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /**
 - FUNCTION: GetResult
@@ -334,7 +334,7 @@ void CBlobResult::AddBlob( CBlob *blob )
 - RESULT:
 	- vector with all the results in the same order as the blobs
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -351,7 +351,7 @@ double_vector CBlobResult::GetResult( funcio_calculBlob *evaluador ) const
 	double_vector::iterator itResult = result.GetIterator();
 	Blob_vector::const_iterator itBlobs = m_blobs.begin();
 
-	// avaluem la funció en tots els blobs
+	// avaluem la funci?en tots els blobs
 	while( itBlobs != m_blobs.end() )
 	{
 		*itResult = (*evaluador)(**itBlobs);
@@ -363,16 +363,16 @@ double_vector CBlobResult::GetResult( funcio_calculBlob *evaluador ) const
 #endif
 
 /**
-- FUNCIÓ: GetSTLResult
+- FUNCI? GetSTLResult
 - FUNCIONALITAT: Calcula el resultat especificat sobre tots els blobs de la classe
 - PARÀMETRES:
 	- evaluador: Qualsevol objecte derivat de COperadorBlob
 - RESULTAT:
 	- Retorna un array de double's STL amb el resultat per cada blob
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /**
 - FUNCTION: GetResult
@@ -384,7 +384,7 @@ double_vector CBlobResult::GetResult( funcio_calculBlob *evaluador ) const
 - RESULT:
 	- vector with all the results in the same order as the blobs
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -401,7 +401,7 @@ double_stl_vector CBlobResult::GetSTLResult( funcio_calculBlob *evaluador ) cons
 	double_stl_vector::iterator itResult = result.begin();
 	Blob_vector::const_iterator itBlobs = m_blobs.begin();
 
-	// avaluem la funció en tots els blobs
+	// avaluem la funci?en tots els blobs
 	while( itBlobs != m_blobs.end() )
 	{
 		*itResult = (*evaluador)(**itBlobs);
@@ -412,17 +412,17 @@ double_stl_vector CBlobResult::GetSTLResult( funcio_calculBlob *evaluador ) cons
 }
 
 /**
-- FUNCIÓ: GetNumber
-- FUNCIONALITAT: Calcula el resultat especificat sobre un únic blob de la classe
+- FUNCI? GetNumber
+- FUNCIONALITAT: Calcula el resultat especificat sobre un ?ic blob de la classe
 - PARÀMETRES:
 	- evaluador: Qualsevol objecte derivat de COperadorBlob
-	- indexblob: número de blob del que volem calcular el resultat.
+	- indexblob: n?ero de blob del que volem calcular el resultat.
 - RESULTAT:
 	- Retorna un double amb el resultat
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /**
 - FUNCTION: GetNumber
@@ -433,7 +433,7 @@ double_stl_vector CBlobResult::GetSTLResult( funcio_calculBlob *evaluador ) cons
 				 COperadorBlob class )
 - RESULT:
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -447,31 +447,31 @@ double CBlobResult::GetNumber( int indexBlob, funcio_calculBlob *evaluador ) con
 /////////////////////////// FILTRAT DE BLOBS ////////////////////////////////////
 
 /**
-- FUNCIÓ: Filter
-- FUNCIONALITAT: Filtra els blobs de la classe i deixa el resultat amb només 
+- FUNCI? Filter
+- FUNCIONALITAT: Filtra els blobs de la classe i deixa el resultat amb nom? 
 			   els blobs que han passat el filtre.
 			   El filtrat es basa en especificar condicions sobre un resultat dels blobs
 			   i seleccionar (o excloure) aquells blobs que no compleixen una determinada
 			   condicio
 - PARÀMETRES:
 	- dst: variable per deixar els blobs filtrats
-	- filterAction:	acció de filtrat. Incloure els blobs trobats (B_INCLUDE),
+	- filterAction:	acci?de filtrat. Incloure els blobs trobats (B_INCLUDE),
 				    o excloure els blobs trobats (B_EXCLUDE)
-	- evaluador: Funció per evaluar els blobs (qualsevol objecte derivat de COperadorBlob
-	- Condition: tipus de condició que ha de superar la mesura (FilterType) 
+	- evaluador: Funci?per evaluar els blobs (qualsevol objecte derivat de COperadorBlob
+	- Condition: tipus de condici?que ha de superar la mesura (FilterType) 
 				 sobre cada blob per a ser considerat.
 				    B_EQUAL,B_NOT_EQUAL,B_GREATER,B_LESS,B_GREATER_OR_EQUAL,
 				    B_LESS_OR_EQUAL,B_INSIDE,B_OUTSIDE
-	- LowLimit:  valor numèric per a la comparació (Condition) de la mesura (FilterType)
-	- HighLimit: valor numèric per a la comparació (Condition) de la mesura (FilterType)
-				 (només té sentit per a aquelles condicions que tenen dos valors 
+	- LowLimit:  valor num?ic per a la comparaci?(Condition) de la mesura (FilterType)
+	- HighLimit: valor num?ic per a la comparaci?(Condition) de la mesura (FilterType)
+				 (nom? t?sentit per a aquelles condicions que tenen dos valors 
 				 (B_INSIDE, per exemple).
 - RESULTAT:
 	- Deixa els blobs resultants del filtrat a destination
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /**
 - FUNCTION: Filter
@@ -493,7 +493,7 @@ double CBlobResult::GetNumber( int indexBlob, funcio_calculBlob *evaluador ) con
 	- It returns on dst the blobs that accomplish (B_INCLUDE) or discards (B_EXCLUDE)
 	  the Condition on the result returned by evaluador on each blob
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -509,31 +509,31 @@ void CBlobResult::Filter(CBlobResult &dst,
 }
 
 /**
-- FUNCIÓ: Filter (const version)
-- FUNCIONALITAT: Filtra els blobs de la classe i deixa el resultat amb només 
+- FUNCI? Filter (const version)
+- FUNCIONALITAT: Filtra els blobs de la classe i deixa el resultat amb nom? 
 			   els blobs que han passat el filtre.
 			   El filtrat es basa en especificar condicions sobre un resultat dels blobs
 			   i seleccionar (o excloure) aquells blobs que no compleixen una determinada
 			   condicio
 - PARÀMETRES:
 	- dst: variable per deixar els blobs filtrats
-	- filterAction:	acció de filtrat. Incloure els blobs trobats (B_INCLUDE),
+	- filterAction:	acci?de filtrat. Incloure els blobs trobats (B_INCLUDE),
 				    o excloure els blobs trobats (B_EXCLUDE)
-	- evaluador: Funció per evaluar els blobs (qualsevol objecte derivat de COperadorBlob
-	- Condition: tipus de condició que ha de superar la mesura (FilterType) 
+	- evaluador: Funci?per evaluar els blobs (qualsevol objecte derivat de COperadorBlob
+	- Condition: tipus de condici?que ha de superar la mesura (FilterType) 
 				 sobre cada blob per a ser considerat.
 				    B_EQUAL,B_NOT_EQUAL,B_GREATER,B_LESS,B_GREATER_OR_EQUAL,
 				    B_LESS_OR_EQUAL,B_INSIDE,B_OUTSIDE
-	- LowLimit:  valor numèric per a la comparació (Condition) de la mesura (FilterType)
-	- HighLimit: valor numèric per a la comparació (Condition) de la mesura (FilterType)
-				 (només té sentit per a aquelles condicions que tenen dos valors 
+	- LowLimit:  valor num?ic per a la comparaci?(Condition) de la mesura (FilterType)
+	- HighLimit: valor num?ic per a la comparaci?(Condition) de la mesura (FilterType)
+				 (nom? t?sentit per a aquelles condicions que tenen dos valors 
 				 (B_INSIDE, per exemple).
 - RESULTAT:
 	- Deixa els blobs resultants del filtrat a destination
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /**
 - FUNCTION: Filter (const version)
@@ -555,7 +555,7 @@ void CBlobResult::Filter(CBlobResult &dst,
 	- It returns on dst the blobs that accomplish (B_INCLUDE) or discards (B_EXCLUDE)
 	  the Condition on the result returned by evaluador on each blob
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -574,7 +574,7 @@ void CBlobResult::Filter(CBlobResult &dst,
 	// inline operation: remove previous blobs
 	if( &dst == this ) 
 	{
-		// esborrem els primers blobs ( que són els originals )
+		// esborrem els primers blobs ( que s? els originals )
 		// ja que els tindrem replicats al final si passen el filtre
 		Blob_vector::iterator itBlobs = m_blobs.begin();
 		for( int i = 0; i < numBlobs; i++ )
@@ -598,7 +598,7 @@ void CBlobResult::DoFilter(CBlobResult &dst, int filterAction, funcio_calculBlob
 
 	if( GetNumBlobs() <= 0 ) return;
 	if( !evaluador ) return;
-	//avaluem els blobs amb la funció pertinent	
+	//avaluem els blobs amb la funci?pertinent	
 	avaluacioBlobs = GetSTLResult(evaluador);
 	itavaluacioBlobs = avaluacioBlobs.begin();
 	numBlobs = GetNumBlobs();
@@ -695,15 +695,15 @@ void CBlobResult::DoFilter(CBlobResult &dst, int filterAction, funcio_calculBlob
 	}
 }
 /**
-- FUNCIÓ: GetBlob
+- FUNCI? GetBlob
 - FUNCIONALITAT: Retorna un blob si aquest existeix (index != -1)
 - PARÀMETRES:
 	- indexblob: index del blob a retornar
 - RESULTAT:
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /*
 - FUNCTION: GetBlob
@@ -712,7 +712,7 @@ void CBlobResult::DoFilter(CBlobResult &dst, int filterAction, funcio_calculBlob
 	- indexblob: index in the blob array
 - RESULT:
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -732,8 +732,8 @@ CBlob *CBlobResult::GetBlob(int indexblob)
 }
 
 /**
-- FUNCIÓ: GetNthBlob
-- FUNCIONALITAT: Retorna l'enèssim blob segons un determinat criteri
+- FUNCI? GetNthBlob
+- FUNCIONALITAT: Retorna l'en?sim blob segons un determinat criteri
 - PARÀMETRES:
 	- criteri: criteri per ordenar els blobs (objectes derivats de COperadorBlob)
 	- nBlob: index del blob a retornar
@@ -742,11 +742,11 @@ CBlob *CBlobResult::GetBlob(int indexblob)
 	- retorna el blob nBlob a dst ordenant els blobs de la classe segons el criteri
 	  en ordre DESCENDENT. Per exemple, per obtenir el blob major:
 		GetNthBlob( CBlobGetArea(), 0, blobMajor );
-		GetNthBlob( CBlobGetArea(), 1, blobMajor ); (segon blob més gran)
+		GetNthBlob( CBlobGetArea(), 1, blobMajor ); (segon blob m? gran)
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /*
 - FUNCTION: GetNthBlob
@@ -757,7 +757,7 @@ CBlob *CBlobResult::GetBlob(int indexblob)
 	- dst: where to store the result
 - RESULT:
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -774,7 +774,7 @@ void CBlobResult::GetNthBlob( funcio_calculBlob *criteri, int nBlob, CBlob &dst 
 	double_stl_vector avaluacioBlobs, avaluacioBlobsOrdenat;
 	double valorEnessim;
 
-	//avaluem els blobs amb la funció pertinent	
+	//avaluem els blobs amb la funci?pertinent	
 	avaluacioBlobs = GetSTLResult(criteri);
 
 	avaluacioBlobsOrdenat = double_stl_vector( GetNumBlobs() );
@@ -788,7 +788,7 @@ void CBlobResult::GetNthBlob( funcio_calculBlob *criteri, int nBlob, CBlob &dst 
 
 	valorEnessim = avaluacioBlobsOrdenat[nBlob];
 
-	// busquem el primer blob que té el valor n-ssim
+	// busquem el primer blob que t?el valor n-ssim
 	double_stl_vector::const_iterator itAvaluacio = avaluacioBlobs.begin();
 
 	bool trobatBlob = false;
@@ -806,15 +806,15 @@ void CBlobResult::GetNthBlob( funcio_calculBlob *criteri, int nBlob, CBlob &dst 
 }
 
 /**
-- FUNCIÓ: ClearBlobs
+- FUNCI? ClearBlobs
 - FUNCIONALITAT: Elimina tots els blobs de l'objecte
 - PARÀMETRES:
 - RESULTAT: 
-	- Allibera tota la memòria dels blobs
+	- Allibera tota la mem?ia dels blobs
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs Navarra
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr? Navarra
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /*
 - FUNCTION: ClearBlobs
@@ -822,7 +822,7 @@ void CBlobResult::GetNthBlob( funcio_calculBlob *criteri, int nBlob, CBlob &dst 
 - PARAMETERS:
 - RESULT:
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -839,17 +839,17 @@ void CBlobResult::ClearBlobs()
 }
 
 /**
-- FUNCIÓ: RaiseError
-- FUNCIONALITAT: Funció per a notificar errors al l'usuari (en debug) i llença
+- FUNCI? RaiseError
+- FUNCIONALITAT: Funci?per a notificar errors al l'usuari (en debug) i llen?
 			   les excepcions
 - PARÀMETRES:
 	- errorCode: codi d'error
 - RESULTAT: 
-	- Ensenya un missatge a l'usuari (en debug) i llença una excepció
+	- Ensenya un missatge a l'usuari (en debug) i llen? una excepci?
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs Navarra
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr? Navarra
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /*
 - FUNCTION: RaiseError
@@ -860,7 +860,7 @@ void CBlobResult::ClearBlobs()
 	- in _SHOW_ERRORS version, shows a message box with the error. In release is silent.
 	  In both cases throws an exception with the error.
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */
@@ -894,16 +894,16 @@ void CBlobResult::RaiseError(const int errorCode) const
 
 
 /**
-- FUNCIÓ: PrintBlobs
-- FUNCIONALITAT: Escriu els paràmetres (àrea, perímetre, exterior, mitjana) 
+- FUNCI? PrintBlobs
+- FUNCIONALITAT: Escriu els par?etres (?ea, per?etre, exterior, mitjana) 
 			   de tots els blobs a un fitxer.
 - PARÀMETRES:
 	- nom_fitxer: path complet del fitxer amb el resultat
 - RESULTAT:
 - RESTRICCIONS:
-- AUTOR: Ricard Borràs
-- DATA DE CREACIÓ: 25-05-2005.
-- MODIFICACIÓ: Data. Autor. Descripció.
+- AUTOR: Ricard Borr?
+- DATA DE CREACI? 25-05-2005.
+- MODIFICACI? Data. Autor. Descripci?
 */
 /*
 - FUNCTION: PrintBlobs
@@ -912,7 +912,7 @@ void CBlobResult::RaiseError(const int errorCode) const
 	- nom_fitxer: full path + filename to generate
 - RESULT:
 - RESTRICTIONS:
-- AUTHOR: Ricard Borràs
+- AUTHOR: Ricard Borr?
 - CREATION DATE: 25-05-2005.
 - MODIFICATION: Date. Author. Description.
 */

@@ -10,6 +10,9 @@
 using namespace tld;
 using namespace cv;
 
+#define MY_TIMER 100
+//static char* video_name = "PETS2000.avi";
+
 // CPicturePreview
 
 class CPicturePreview : public CStatic
@@ -29,10 +32,11 @@ protected:
 public:
 
 	MainClass *main;
-	VideoCapture mVideoCapture;
+	VideoCapture *mVideoCapture;
 	CMT cmt;
 	Mat frame;
 	Mat grey;
+	Mat frameProcessing;
 	bool reuseFrameOnce = false;
 	bool skipProcessingOnce = false;
 	double tic;

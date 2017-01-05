@@ -14,7 +14,6 @@ IMPLEMENT_DYNAMIC(CPicturePreview, CStatic)
 
 CPicturePreview::CPicturePreview()
 {
-
 	EnableAutomation();
 }
 
@@ -187,15 +186,24 @@ void CPicturePreview::OnTimer(UINT_PTR nIDEvent)
 
 	if (!reuseFrameOnce)
 	{
-		mVideoCapture >> frame;
+		*mVideoCapture >> frame;
 	}
+
+	if (frame.empty()) {
+		CStatic::OnTimer(nIDEvent);
+		KillTimer(MY_TIMER);
+		return;
+	}
+
+	resize(frame, frameProcessing, Size(640, 480));
 
 	if (!skipProcessingOnce && tracking)
 	{
-		main->tld->processImage(frame);
+		main->tld->processImage(frameProcessing);
+
 		if(cmt_tracking){
 		    cv::Mat im_gray;
-		    cvtColor(frame, im_gray, CV_BGR2GRAY);
+		    cvtColor(frameProcessing, im_gray, CV_BGR2GRAY);
 		    cmt.processFrame(im_gray);
 		}
 	}
@@ -225,15 +233,22 @@ void CPicturePreview::OnTimer(UINT_PTR nIDEvent)
 		CvScalar black = CV_RGB(0, 0, 0);
 		CvScalar white = CV_RGB(255, 255, 255);
 
+		// set ratio
+		double px = frame.cols / (double)frameProcessing.cols;
+		double py = frame.rows / (double)frameProcessing.rows;
+
 		if (cmt.hasResult && tracking) {
 			for (int i = 0; i < cmt.trackedKeypoints.size(); i++) {
 				//cvCircle(img, cmt.trackedKeypoints[i].first.pt, 3, cv::Scalar(255, 255, 255));
 				CvPoint nPoint = cmt.trackedKeypoints[i].first.pt;
+				nPoint.x = nPoint.x * px; nPoint.y = nPoint.y * py;
 				cv::circle(frame, nPoint, 3, cv::Scalar(255, 255, 255));
 			}
 		    //cvRectangle(img, cmt.boundingbox.tl(), cmt.boundingbox.br(), Scalar(0,0,255), 1, 4);
 			CvPoint topleft = cvPoint(cmt.boundingbox.x, cmt.boundingbox.y);
 			CvPoint bottomRight = cvPoint(cmt.boundingbox.x + cmt.boundingbox.width, cmt.boundingbox.y + cmt.boundingbox.height);
+			topleft.x = topleft.x * px; topleft.y = topleft.y * py;
+			bottomRight.x = bottomRight.x * px; bottomRight.y = bottomRight.y * py;
 			cv::rectangle(frame, topleft, bottomRight, Scalar(0, 0, 255), 1, 4);
 
 			//draw some crosshairs around the object
@@ -253,6 +268,8 @@ void CPicturePreview::OnTimer(UINT_PTR nIDEvent)
 			CvScalar rectangleColor = (confident) ? blue : yellow;
 			CvPoint topleft = cvPoint(main->tld->currBB->x, main->tld->currBB->y);
 			CvPoint bottomRight = cvPoint(main->tld->currBB->x + main->tld->currBB->width, main->tld->currBB->y + main->tld->currBB->height);
+			topleft.x = topleft.x * px; topleft.y = topleft.y * py;
+			bottomRight.x = bottomRight.x * px; bottomRight.y = bottomRight.y * py;
 
 			cv::Rect r = cv::Rect(topleft.x, topleft.y, bottomRight.x - topleft.x, bottomRight.y - topleft.y);
 			cv::rectangle(frame, r, rectangleColor, 2);
@@ -308,7 +325,7 @@ int CPicturePreview::startMyTimer(int pCmdType)
 {
 	if (pCmdType) {
 
-		SetTimer(1, 30, NULL);
+		SetTimer(MY_TIMER, 30, NULL);
 	}
 	else {
 
@@ -330,10 +347,12 @@ int CPicturePreview::initObjectTracking()
 	config.configure(main);
 	srand(main->seed);
 
-	mVideoCapture >> frame;
+	*mVideoCapture >> frame;
 
-	cvtColor(frame, grey, CV_BGR2GRAY);
+	resize(frame, frameProcessing, Size(640, 480));
 
+	cvtColor(frameProcessing, grey, CV_BGR2GRAY);
+	
 	main->tld->detectorCascade->imgWidth = grey.cols;
 	main->tld->detectorCascade->imgHeight = grey.rows;
 	main->tld->detectorCascade->imgWidthStep = grey.step;
@@ -343,10 +362,19 @@ int CPicturePreview::initObjectTracking()
 
 int CPicturePreview::selectObject()
 {
-	cvtColor(frame, grey, CV_BGR2GRAY);
+	cvtColor(frameProcessing, grey, CV_BGR2GRAY);
 
 	if (roiRect.width < 1 || roiRect.height < 1)
 		return FALSE;
+
+	// set ratio
+	double px =frameProcessing.cols / (double)frame.cols;
+	double py = frameProcessing.rows / (double)frame.rows;
+
+	roiRect.x = roiRect.x * px;
+	roiRect.y = roiRect.y * py;
+	roiRect.width = roiRect.width * px;
+	roiRect.height = roiRect.height * py;
 
 	main->tld->selectObject(grey, &roiRect);
 
@@ -360,13 +388,24 @@ int CPicturePreview::selectObject()
 
 int CPicturePreview::isEnableVideo()
 {
-	mVideoCapture.open(0);
-	
-	if (!mVideoCapture.isOpened())  // check if we succeeded
-		return FALSE;
+	//String url = "https://devimages.apple.com.edgekey.net/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8";
+	//mVideoCapture.open(0);
+	//mVideoCapture.open("https://devimages.apple.com.edgekey.net/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8");
+	//mVideoCapture.open("151127.mp4");
 
-	//mVideoCapture.set(CV_CAP_PROP_FRAME_WIDTH, 1280); //640 (1280)
-	//mVideoCapture.set(CV_CAP_PROP_FRAME_HEIGHT, 720); //480 -> 340 (720)
+	//mVideoCapture = new VideoCapture("https://devimages.apple.com.edgekey.net/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8");
+	//mVideoCapture = new VideoCapture("151127.mp4");
+	mVideoCapture = new VideoCapture(1);
+
+	/*char* video_name;
+	video_name = "768x576.avi";
+	mVideoCapture.open(video_name);*/
+
+	if (!mVideoCapture->isOpened())
+		return false;
+	
+	mVideoCapture->set(CV_CAP_PROP_FRAME_WIDTH, 1280); //640 (1280) 1920
+	mVideoCapture->set(CV_CAP_PROP_FRAME_HEIGHT, 720); //480 -> 340 (720) 1080
 
 	return TRUE;
 

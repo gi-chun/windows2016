@@ -166,8 +166,9 @@ Java_com_sjp_sjplab_sjplabandroidot_MainActivity_OpenCMT(JNIEnv*, jobject, jlong
 //	 cmt = new CMT();
     cv::Mat& im_gray  = *(cv::Mat*)addrGray;
     //gclee
-//    cv::UMat temp;
-//    im_gray.copyTo(temp);
+    cv::UMat temp;
+    im_gray.copyTo(temp);
+    //temp = im_gray.getUMat(cv::ACCESS_READ);
 
 //    //find largest_countour
 //    cv::Rect roi = cv::Rect(x, y, x+width, y+height);
@@ -206,7 +207,7 @@ Java_com_sjp_sjplab_sjplabandroidot_MainActivity_OpenCMT(JNIEnv*, jobject, jlong
     Point p2(x+width, y+height);
 
     CMTinitiated=false;
-    if (cmt->initialise(im_gray, p1, p2))
+    if (cmt->initialise(temp, p1, p2))
         CMTinitiated=true;
 
 }
@@ -220,10 +221,10 @@ Java_com_sjp_sjplab_sjplabandroidot_MainActivity_ProcessCMT(JNIEnv*, jobject, jl
     Mat& im_gray  = *(Mat*)addrGray;
 //    Mat& im_roi = *(Mat*)addrRoiRgba;
     //gclee
-//    UMat temp;
-//    im_gray.copyTo(temp);
-
-    cmt->processFrame(im_gray);
+    UMat temp;
+    im_gray.copyTo(temp);
+    //temp = im_gray.getUMat(cv::ACCESS_READ);
+    cmt->processFrame(temp);
 
 //    if(cmt->hasResult) {
 //

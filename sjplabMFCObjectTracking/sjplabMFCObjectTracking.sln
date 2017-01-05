@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sjplabMFCObjectTracking", "sjplabMFCObjectTracking.vcxproj", "{63D6996A-C10E-4512-9738-C63A9E778EB6}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "windowsSJPLabMFC", "..\windowsSJPLabMFC\windowsSJPLabMFC.vdproj", "{681AB137-ED7C-4BE8-B4BA-018899833E14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,10 @@ Global
 		{63D6996A-C10E-4512-9738-C63A9E778EB6}.Release|x64.Build.0 = Release|x64
 		{63D6996A-C10E-4512-9738-C63A9E778EB6}.Release|x86.ActiveCfg = Release|Win32
 		{63D6996A-C10E-4512-9738-C63A9E778EB6}.Release|x86.Build.0 = Release|Win32
+		{681AB137-ED7C-4BE8-B4BA-018899833E14}.Debug|x64.ActiveCfg = Debug
+		{681AB137-ED7C-4BE8-B4BA-018899833E14}.Debug|x86.ActiveCfg = Debug
+		{681AB137-ED7C-4BE8-B4BA-018899833E14}.Release|x64.ActiveCfg = Release
+		{681AB137-ED7C-4BE8-B4BA-018899833E14}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

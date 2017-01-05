@@ -6,6 +6,7 @@
 
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/core/ocl.hpp>
 
 
 
@@ -27,9 +28,9 @@ public:
     cv::Ptr<cv::DescriptorExtractor> descriptorExtractor;
     cv::Ptr<cv::DescriptorMatcher> descriptorMatcher;
 
-    cv::Mat selectedFeatures;
+    cv::UMat selectedFeatures;
     std::vector<int> selectedClasses;
-    cv::Mat featuresDatabase;
+    cv::UMat featuresDatabase;
     std::vector<int> classesDatabase;
 
     std::vector<std::vector<float> > squareForm;
@@ -51,7 +52,7 @@ public:
 
     std::vector<cv::Point2f> springs;
 
-    cv::Mat im_prev;
+    cv::UMat im_prev;
     std::vector<std::pair<cv::KeyPoint,int> > activeKeypoints;
     std::vector<std::pair<cv::KeyPoint,int> > trackedKeypoints;
 
@@ -62,9 +63,9 @@ public:
     std::vector<std::pair<cv::KeyPoint, int> > outliers;
 
     CMT();
-    bool initialise(cv::Mat im_gray0, cv::Point2f topleft, cv::Point2f bottomright);
+    bool initialise(cv::UMat im_gray0, cv::Point2f topleft, cv::Point2f bottomright);
     void estimate(const std::vector<std::pair<cv::KeyPoint, int> >& keypointsIN, cv::Point2f& center, float& scaleEstimate, float& medRot, std::vector<std::pair<cv::KeyPoint, int> >& keypoints);
-    void processFrame(cv::Mat im_gray);
+    void processFrame(cv::UMat im_gray);
 
 //    bool Save(const char *path);
 //    bool Load(const char *path);
@@ -79,6 +80,6 @@ public:
 };
 
 void inout_rect(const std::vector<cv::KeyPoint>& keypoints, cv::Point2f topleft, cv::Point2f bottomright, std::vector<cv::KeyPoint>& in, std::vector<cv::KeyPoint>& out);
-void track(cv::Mat im_prev, cv::Mat im_gray, const std::vector<std::pair<cv::KeyPoint, int> >& keypointsIN, std::vector<std::pair<cv::KeyPoint, int> >& keypointsTracked, std::vector<unsigned char>& status, int THR_FB = 20);
+void track(cv::UMat im_prev, cv::UMat im_gray, const std::vector<std::pair<cv::KeyPoint, int> >& keypointsIN, std::vector<std::pair<cv::KeyPoint, int> >& keypointsTracked, std::vector<unsigned char>& status, int THR_FB = 20);
 cv::Point2f rotate(cv::Point2f p, float rad);
 #endif // CMT_H

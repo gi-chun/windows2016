@@ -62,6 +62,10 @@ void CsjplabMFCObjectTrackingDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_OBJTRACKING, mobjecttracking);
 	DDX_Control(pDX, IDC_CONFIG, mbtnconfig);
 	DDX_Control(pDX, IDC_PIC_PREVIEW, mPreviewCtl);
+	DDX_Control(pDX, IDC_STATIC_SOURCE, stSource);
+	DDX_Control(pDX, IDC_STATIC_METHOD, stMethod);
+	DDX_Control(pDX, IDC_COMBO_METHOD, cbMethod);
+	DDX_Control(pDX, IDC_COMBO_SOURCE, cbSource);
 }
 
 BEGIN_MESSAGE_MAP(CsjplabMFCObjectTrackingDlg, CDialogEx)
@@ -74,6 +78,9 @@ ON_BN_CLICKED(IDC_OK, &CsjplabMFCObjectTrackingDlg::OnClickedOk)
 ON_BN_CLICKED(IDC_CONFIG, &CsjplabMFCObjectTrackingDlg::OnClickedConfig)
 ON_BN_CLICKED(IDC_OBJTRACKING, &CsjplabMFCObjectTrackingDlg::OnClickedObjtracking)
 ON_WM_DESTROY()
+ON_CBN_SELCHANGE(IDC_COMBO_METHOD, &CsjplabMFCObjectTrackingDlg::OnSelchangeComboMethod)
+ON_CBN_SELCHANGE(IDC_COMBO_SOURCE, &CsjplabMFCObjectTrackingDlg::OnSelchangeComboSource)
+ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -146,6 +153,8 @@ BOOL CsjplabMFCObjectTrackingDlg::OnInitDialog()
 		mobjecttracking.DrawBorder(FALSE, FALSE);
 		mobjecttracking.DrawTransparent();
 	}
+
+	//SetWindowPos(&this->wndTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
 	if (!mPreviewCtl.isEnableVideo()) {
 		AfxMessageBox(_T("해당하는 캠 장치가 없습니다. "));
@@ -228,7 +237,6 @@ BOOL CsjplabMFCObjectTrackingDlg::OnEraseBkgnd(CDC* pDC)
 	return bRes;                       // CDialog::OnEraseBkgnd(pDC);
 	//return CDialogEx::OnEraseBkgnd(pDC);
 }
-
 
 //void CsjplabMFCObjectTrackingDlg::OnIdok()
 //{
@@ -313,4 +321,45 @@ void CsjplabMFCObjectTrackingDlg::OnDestroy()
 	// TODO: Add your message handler code here
 
 	mPreviewCtl.clearObjectTracking();
+}
+
+
+void CsjplabMFCObjectTrackingDlg::OnSelchangeComboMethod()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+void CsjplabMFCObjectTrackingDlg::OnSelchangeComboSource()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+HBRUSH CsjplabMFCObjectTrackingDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	// TODO:  Change any attributes of the DC here
+	COLORREF red = RGB(0, 0, 0);
+
+	switch (pWnd->GetDlgCtrlID())
+	{
+	case IDC_STATIC_SOURCE:
+		pDC->SetTextColor(RGB(255, 0, 0));
+		pDC->SetBkColor(red);
+	case IDC_STATIC_METHOD:
+		pDC->SetTextColor(RGB(255, 0, 0));
+		pDC->SetBkColor(red);
+	case IDC_COMBO_METHOD:
+		pDC->SetTextColor(RGB(255, 0, 0));
+		//pDC->SetDCBrushColor(RGB(255, 0, 0));
+		//pDC->SetBkMode(TRANSPARENT);
+		pDC->SetBkColor(red);
+	case IDC_COMBO_SOURCE:
+		pDC->SetTextColor(RGB(255, 0, 0));
+		pDC->SetBkColor(red);
+	}
+	// TODO:  Return a different brush if the default is not desired
+	return hbr;
 }
