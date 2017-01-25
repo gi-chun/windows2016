@@ -1,5 +1,5 @@
-
-// sjplabMFCObjectTrackingDlg.cpp : ±¸Çö ÆÄÀÏ
+ï»¿
+// sjplabMFCObjectTrackingDlg.cpp : êµ¬í˜„ íŒŒì¼
 //
 
 #include "stdafx.h"
@@ -11,23 +11,26 @@
 #define new DEBUG_NEW
 #endif
 
+#define LIGHT_COLOR		250
+#define DARK_COLOR		100
 
-// ÀÀ¿ë ÇÁ·Î±×·¥ Á¤º¸¿¡ »ç¿ëµÇ´Â CAboutDlg ´ëÈ­ »óÀÚÀÔ´Ï´Ù.
+
+// ì‘ìš© í”„ë¡œê·¸ë¨ ì •ë³´ì— ì‚¬ìš©ë˜ëŠ” CAboutDlg ëŒ€í™” ìƒìì…ë‹ˆë‹¤.
 
 class CAboutDlg : public CDialogEx
 {
 public:
 	CAboutDlg();
 
-// ´ëÈ­ »óÀÚ µ¥ÀÌÅÍÀÔ´Ï´Ù.
+// ëŒ€í™” ìƒì ë°ì´í„°ì…ë‹ˆë‹¤.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Áö¿øÀÔ´Ï´Ù.
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV ì§€ì›ì…ë‹ˆë‹¤.
 
-// ±¸ÇöÀÔ´Ï´Ù.
+// êµ¬í˜„ì…ë‹ˆë‹¤.
 protected:
 	DECLARE_MESSAGE_MAP()
 };
@@ -45,54 +48,86 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CsjplabMFCObjectTrackingDlg ´ëÈ­ »óÀÚ
+// CsjplabMFCObjectTrackingDlg ëŒ€í™” ìƒì
 
 
 
 CsjplabMFCObjectTrackingDlg::CsjplabMFCObjectTrackingDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(IDD_SJPLABMFCOBJECTTRACKING_DIALOG, pParent)
+	: CBkDialogST(IDD_SJPLABMFCOBJECTTRACKING_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 void CsjplabMFCObjectTrackingDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
+	CBkDialogST::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_OK, mbtnclose);
 	DDX_Control(pDX, IDC_OBJTRACKING, mobjecttracking);
 	DDX_Control(pDX, IDC_CONFIG, mbtnconfig);
 	DDX_Control(pDX, IDC_PIC_PREVIEW, mPreviewCtl);
-	DDX_Control(pDX, IDC_STATIC_SOURCE, stSource);
-	DDX_Control(pDX, IDC_STATIC_METHOD, stMethod);
-	DDX_Control(pDX, IDC_COMBO_METHOD, cbMethod);
-	DDX_Control(pDX, IDC_COMBO_SOURCE, cbSource);
+	//  DDX_Control(pDX, IDC_STATIC_SOURCE, stSource);
+	//  DDX_Control(pDX, IDC_STATIC_METHOD, stMethod);
+	//  DDX_Control(pDX, IDC_COMBO_METHOD, cbMethod);
+	//  DDX_Control(pDX, IDC_COMBO_SOURCE, cbSource);
+	//  DDX_Control(pDX, IDC_STATIC_BACK, m_rightBack);
+	DDX_Control(pDX, IDC_STATIC_BACK, m_rightBack);
+	DDX_Control(pDX, IDC_STATIC_CAMERA, m_camera_back);
+	DDX_Control(pDX, IDC_STATIC_METHOD, m_method_back);
+	DDX_Control(pDX, IDC_STATIC_SOURCE, m_source_back);
+	DDX_Control(pDX, IDC_BTN_CMT, m_btnCmt);
+	DDX_Control(pDX, IDC_BTN_CAM1, m_btnCam1);
+	DDX_Control(pDX, IDC_BTN_CAM2, m_btnCam2);
+	DDX_Control(pDX, IDC_BTN_DOWN, m_btnDown);
+	DDX_Control(pDX, IDC_BTN_LEFT, m_btnLeft);
+	DDX_Control(pDX, IDC_BTN_RIGHT, m_btnRight);
+	DDX_Control(pDX, IDC_BTN_STREAM, m_btnStream);
+	DDX_Control(pDX, IDC_BTN_TLD, m_btnTld);
+	DDX_Control(pDX, IDC_BTN_UP, m_btnUp);
 }
 
-BEGIN_MESSAGE_MAP(CsjplabMFCObjectTrackingDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CsjplabMFCObjectTrackingDlg, CBkDialogST)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_WM_ERASEBKGND()
 //	ON_COMMAND(IDOK, &CsjplabMFCObjectTrackingDlg::OnIdok)
 ON_BN_CLICKED(IDC_OK, &CsjplabMFCObjectTrackingDlg::OnClickedOk)
 ON_BN_CLICKED(IDC_CONFIG, &CsjplabMFCObjectTrackingDlg::OnClickedConfig)
 ON_BN_CLICKED(IDC_OBJTRACKING, &CsjplabMFCObjectTrackingDlg::OnClickedObjtracking)
 ON_WM_DESTROY()
-ON_CBN_SELCHANGE(IDC_COMBO_METHOD, &CsjplabMFCObjectTrackingDlg::OnSelchangeComboMethod)
-ON_CBN_SELCHANGE(IDC_COMBO_SOURCE, &CsjplabMFCObjectTrackingDlg::OnSelchangeComboSource)
+//ON_CBN_SELCHANGE(IDC_COMBO_METHOD, &CsjplabMFCObjectTrackingDlg::OnSelchangeComboMethod)
+//ON_CBN_SELCHANGE(IDC_COMBO_SOURCE, &CsjplabMFCObjectTrackingDlg::OnSelchangeComboSource)
+ON_STN_CLICKED(IDC_PIC_PREVIEW, &CsjplabMFCObjectTrackingDlg::OnStnClickedPicPreview)
+
 ON_WM_CTLCOLOR()
+//ON_WM_ERASEBKGND()
+//ON_WM_NCPAINT()
+//ON_WM_NCACTIVATE()
+//ON_WM_NCHITTEST()
+//ON_WM_NCLBUTTONDOWN()
+//ON_WM_LBUTTONUP()
+ON_BN_CLICKED(IDC_BTN_CAM1, &CsjplabMFCObjectTrackingDlg::OnClickedBtnCam1)
+ON_BN_CLICKED(IDC_BTN_CAM2, &CsjplabMFCObjectTrackingDlg::OnClickedBtnCam2)
+ON_BN_CLICKED(IDC_BTN_CMT, &CsjplabMFCObjectTrackingDlg::OnClickedBtnCmt)
+ON_BN_CLICKED(IDC_BTN_DOWN, &CsjplabMFCObjectTrackingDlg::OnClickedBtnDown)
+ON_BN_CLICKED(IDC_BTN_LEFT, &CsjplabMFCObjectTrackingDlg::OnClickedBtnLeft)
+ON_BN_CLICKED(IDC_BTN_RIGHT, &CsjplabMFCObjectTrackingDlg::OnClickedBtnRight)
+ON_BN_CLICKED(IDC_BTN_STREAM, &CsjplabMFCObjectTrackingDlg::OnClickedBtnStream)
+ON_BN_CLICKED(IDC_BTN_TLD, &CsjplabMFCObjectTrackingDlg::OnClickedBtnTld)
+ON_BN_CLICKED(IDC_BTN_UP, &CsjplabMFCObjectTrackingDlg::OnClickedBtnUp)
 END_MESSAGE_MAP()
 
 
-// CsjplabMFCObjectTrackingDlg ¸Ş½ÃÁö Ã³¸®±â
+// CsjplabMFCObjectTrackingDlg ë©”ì‹œì§€ ì²˜ë¦¬ê¸°
 
 BOOL CsjplabMFCObjectTrackingDlg::OnInitDialog()
 {
-	CDialogEx::OnInitDialog();
+	CBkDialogST::OnInitDialog();
 
-	// ½Ã½ºÅÛ ¸Ş´º¿¡ "Á¤º¸..." ¸Ş´º Ç×¸ñÀ» Ãß°¡ÇÕ´Ï´Ù.
+	SetBitmap(IDB_BKGROUND);
+	//SetBitmap(IDB_SKY);
+	// ì‹œìŠ¤í…œ ë©”ë‰´ì— "ì •ë³´..." ë©”ë‰´ í•­ëª©ì„ ì¶”ê°€í•©ë‹ˆë‹¤.
 
-	// IDM_ABOUTBOX´Â ½Ã½ºÅÛ ¸í·É ¹üÀ§¿¡ ÀÖ¾î¾ß ÇÕ´Ï´Ù.
+	// IDM_ABOUTBOXëŠ” ì‹œìŠ¤í…œ ëª…ë ¹ ë²”ìœ„ì— ìˆì–´ì•¼ í•©ë‹ˆë‹¤.
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -110,61 +145,167 @@ BOOL CsjplabMFCObjectTrackingDlg::OnInitDialog()
 		}
 	}
 
-	// ÀÌ ´ëÈ­ »óÀÚÀÇ ¾ÆÀÌÄÜÀ» ¼³Á¤ÇÕ´Ï´Ù.  ÀÀ¿ë ÇÁ·Î±×·¥ÀÇ ÁÖ Ã¢ÀÌ ´ëÈ­ »óÀÚ°¡ ¾Æ´Ò °æ¿ì¿¡´Â
-	//  ÇÁ·¹ÀÓ¿öÅ©°¡ ÀÌ ÀÛ¾÷À» ÀÚµ¿À¸·Î ¼öÇàÇÕ´Ï´Ù.
-	SetIcon(m_hIcon, TRUE);			// Å« ¾ÆÀÌÄÜÀ» ¼³Á¤ÇÕ´Ï´Ù.
-	SetIcon(m_hIcon, FALSE);		// ÀÛÀº ¾ÆÀÌÄÜÀ» ¼³Á¤ÇÕ´Ï´Ù.
+	// ì´ ëŒ€í™” ìƒìì˜ ì•„ì´ì½˜ì„ ì„¤ì •í•©ë‹ˆë‹¤.  ì‘ìš© í”„ë¡œê·¸ë¨ì˜ ì£¼ ì°½ì´ ëŒ€í™” ìƒìê°€ ì•„ë‹ ê²½ìš°ì—ëŠ”
+	//  í”„ë ˆì„ì›Œí¬ê°€ ì´ ì‘ì—…ì„ ìë™ìœ¼ë¡œ ìˆ˜í–‰í•©ë‹ˆë‹¤.
+	SetIcon(m_hIcon, TRUE);			// í° ì•„ì´ì½˜ì„ ì„¤ì •í•©ë‹ˆë‹¤.
+	SetIcon(m_hIcon, FALSE);		// ì‘ì€ ì•„ì´ì½˜ì„ ì„¤ì •í•©ë‹ˆë‹¤.
 
-	ShowWindow(SW_MINIMIZE);
+	//ShowWindow(SW_MINIMIZE);
 
-	// TODO: ¿©±â¿¡ Ãß°¡ ÃÊ±âÈ­ ÀÛ¾÷À» Ãß°¡ÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ì¶”ê°€ ì´ˆê¸°í™” ì‘ì—…ì„ ì¶”ê°€í•©ë‹ˆë‹¤.
 	/*mbtnclose.LoadBitmaps(IDR_MAINFRAME, IDR_MAINFRAME);
 	mobjecttracking.LoadBitmaps(IDR_MAINFRAME, IDR_MAINFRAME);
 	*/
 
-	if (m_CImage.Load(IDB_PNG_LINK)) {
+	//Â buttonÂ styleÂ [BUTTONSTYLE_FLATÂ /Â BUTTONSTYLE_SEMIFLATÂ /Â BUTTONSTYLE_3D]
+	//m_cButton_Test1.m_nFlatStyleÂ Â  = CMFCButton::BUTTONSTYLE_NOBORDERS;
+	//m_cButton_Test1.m_bTransparentÂ  = TRUE;Â Â Â Â //Â íˆ¬ëª…ë„Â ì„¤ì •
+	//m_cButton_Test1.m_bDrawFocusÂ  = FALSE;
+	//m_cButton_Test1.SetImage(hBit1, TRUE, hBit2);
+	////Â Â Â Â m_cButton_Test1.SizeToContent(TRUE);
+	//m_cButton_Test1.SetWindowText("");
+	//m_cButton_Test1.SetMouseCursorHand();
+
+	m_currentSource = VIDEO_SOURCE_STREAM;
+	m_currentMethod = METHOD_CMT;
+	mPreviewCtl.m_currentMethod = m_currentMethod;
+
+	m_btnStream.SetBitmaps(IDB_BMP_CHECK_SELECTED, RGB(255, 0, 255));
+	m_btnStream.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
+	m_btnStream.SetPressedStyle(CButtonST::BTNST_PRESSED_LEFTRIGHT, FALSE);
+	m_btnStream.SetColor(CButtonST::BTNST_COLOR_FG_IN, RGB(255, 255, 255));
+	m_btnStream.SetColor(CButtonST::BTNST_COLOR_FG_OUT, RGB(0, 0, 0));
+	m_btnStream.SizeToContent();
+	m_btnStream.DrawBorder(FALSE, FALSE);
+
+	m_btnCam1.SetBitmaps(IDB_BMP_CHECK_NORMAL, RGB(255, 0, 255));
+	m_btnCam1.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
+	m_btnCam1.SetPressedStyle(CButtonST::BTNST_PRESSED_LEFTRIGHT, FALSE);
+	m_btnCam1.SetColor(CButtonST::BTNST_COLOR_FG_IN, RGB(255, 255, 255));
+	m_btnCam1.SetColor(CButtonST::BTNST_COLOR_FG_OUT, RGB(0, 0, 0));
+	m_btnCam1.SizeToContent();
+	m_btnCam1.DrawBorder(FALSE, FALSE);
+
+	m_btnCam2.SetBitmaps(IDB_BMP_CHECK_NORMAL, RGB(255, 0, 255));
+	m_btnCam2.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
+	m_btnCam2.SetPressedStyle(CButtonST::BTNST_PRESSED_LEFTRIGHT, FALSE);
+	m_btnCam2.SetColor(CButtonST::BTNST_COLOR_FG_IN, RGB(255, 255, 255));
+	m_btnCam2.SetColor(CButtonST::BTNST_COLOR_FG_OUT, RGB(0, 0, 0));
+	m_btnCam2.SizeToContent();
+	m_btnCam2.DrawBorder(FALSE, FALSE);
+
+	m_btnCmt.SetBitmaps(IDB_BMP_CHECK_SELECTED, RGB(255, 0, 255));
+	m_btnCmt.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
+	m_btnCmt.SetPressedStyle(CButtonST::BTNST_PRESSED_LEFTRIGHT, FALSE);
+	m_btnCmt.SetColor(CButtonST::BTNST_COLOR_FG_IN, RGB(255, 255, 255));
+	m_btnCmt.SetColor(CButtonST::BTNST_COLOR_FG_OUT, RGB(0, 0, 0));
+	m_btnCmt.SizeToContent();
+	m_btnCmt.DrawBorder(FALSE, FALSE);
+
+	m_btnTld.SetBitmaps(IDB_BMP_CHECK_NORMAL, RGB(255, 0, 255));
+	m_btnTld.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
+	m_btnTld.SetPressedStyle(CButtonST::BTNST_PRESSED_LEFTRIGHT, FALSE);
+	m_btnTld.SetColor(CButtonST::BTNST_COLOR_FG_IN, RGB(255, 255, 255));
+	m_btnTld.SetColor(CButtonST::BTNST_COLOR_FG_OUT, RGB(0, 0, 0));
+	m_btnTld.SizeToContent();
+	m_btnTld.DrawBorder(FALSE, FALSE);
+
+	m_btnUp.SetBitmaps(IDB_BMP_UP, RGB(255, 0, 255));
+	m_btnUp.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
+	m_btnUp.SetPressedStyle(CButtonST::BTNST_PRESSED_LEFTRIGHT, FALSE);
+	m_btnUp.SetColor(CButtonST::BTNST_COLOR_FG_IN, RGB(255, 255, 255));
+	m_btnUp.SetColor(CButtonST::BTNST_COLOR_FG_OUT, RGB(0, 0, 0));
+	m_btnUp.SizeToContent();
+	m_btnUp.DrawBorder(FALSE, FALSE);
+
+	m_btnRight.SetBitmaps(IDB_BMP_RIGHT, RGB(255, 0, 255));
+	m_btnRight.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
+	m_btnRight.SetPressedStyle(CButtonST::BTNST_PRESSED_LEFTRIGHT, FALSE);
+	m_btnRight.SetColor(CButtonST::BTNST_COLOR_FG_IN, RGB(255, 255, 255));
+	m_btnRight.SetColor(CButtonST::BTNST_COLOR_FG_OUT, RGB(0, 0, 0));
+	m_btnRight.SizeToContent();
+	m_btnRight.DrawBorder(FALSE, FALSE);
+
+	m_btnDown.SetBitmaps(IDB_BMP_DOWN, RGB(255, 0, 255));
+	m_btnDown.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
+	m_btnDown.SetPressedStyle(CButtonST::BTNST_PRESSED_LEFTRIGHT, FALSE);
+	m_btnDown.SetColor(CButtonST::BTNST_COLOR_FG_IN, RGB(255, 255, 255));
+	m_btnDown.SetColor(CButtonST::BTNST_COLOR_FG_OUT, RGB(0, 0, 0));
+	m_btnDown.SizeToContent();
+	m_btnDown.DrawBorder(FALSE, FALSE);
+
+	m_btnLeft.SetBitmaps(IDB_BMP_LEFT, RGB(255, 0, 255));
+	m_btnLeft.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
+	m_btnLeft.SetPressedStyle(CButtonST::BTNST_PRESSED_LEFTRIGHT, FALSE);
+	m_btnLeft.SetColor(CButtonST::BTNST_COLOR_FG_IN, RGB(255, 255, 255));
+	m_btnLeft.SetColor(CButtonST::BTNST_COLOR_FG_OUT, RGB(0, 0, 0));
+	m_btnLeft.SizeToContent();
+	m_btnLeft.DrawBorder(FALSE, FALSE);
+	
+	m_rightBack.SubclassDlgItem(IDC_STATIC_BACK, this);
+	m_rightBack.SetTextColor(::GetSysColor(COLOR_INFOTEXT));
+	m_rightBack.SetBkColor(RGB(70, 70, 70));
+
+	m_source_back.SubclassDlgItem(IDC_STATIC_SOURCE, this);
+	m_source_back.SetTextColor(RGB(255, 255, 255));
+	m_source_back.SetBkColor(RGB(83, 83, 83));
+
+	m_method_back.SubclassDlgItem(IDC_STATIC_METHOD, this);
+	m_method_back.SetTextColor(RGB(255, 255, 255));
+	m_method_back.SetBkColor(RGB(83, 83, 83));
+
+	m_camera_back.SubclassDlgItem(IDC_STATIC_CAMERA, this);
+	m_camera_back.SetTextColor(RGB(255, 255, 255));
+	m_camera_back.SetBkColor(RGB(83, 83, 83));
+
+	if (m_CImage.Load(IDB_PNG_EXIT)) {
 		htbnmp = m_CImage;
 
-		mbtnclose.SetBitmaps(htbnmp, RGB(255,255,255), NULL, RGB(255, 255, 255));
-		mbtnclose.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
-		mbtnclose.SetPressedStyle(CButtonST::BTNST_PRESSED_TOPBOTTOM, FALSE);
-		mbtnclose.SizeToContent();
-		mbtnclose.DrawBorder(FALSE, FALSE);
-		mbtnclose.DrawTransparent();
-		
-		mbtnconfig.SetBitmaps(htbnmp, RGB(255, 255, 255), NULL, RGB(255, 255, 255));
-		mbtnconfig.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
-		mbtnconfig.SetPressedStyle(CButtonST::BTNST_PRESSED_TOPBOTTOM, FALSE);
-		mbtnconfig.SizeToContent();
-		mbtnconfig.DrawBorder(FALSE, FALSE);
-		mbtnconfig.DrawTransparent();
+		mbtnclose.m_nFlatStyle = CMFCButton::BUTTONSTYLE_NOBORDERS;
+		mbtnclose.m_bTransparent = TRUE;
+		mbtnclose.m_bDrawFocus = FALSE;
+		mbtnclose.SetImage(htbnmp, TRUE, htbnmp);
+		mbtnclose.SetMouseCursorHand();
 	}
 
 	htbnmp = NULL;
 	m_CImage.Detach();
 
-	if (m_CImage.Load(IDB_PNG_PLUS)) {
+	if (m_CImage.Load(IDB_PNG_TRACKING_NORMAL)) {
 		htbnmp = m_CImage;
 
-		mobjecttracking.SetBitmaps(htbnmp, RGB(255, 255, 255), NULL, RGB(255, 255, 255));
-		mobjecttracking.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
-		mobjecttracking.SetPressedStyle(CButtonST::BTNST_PRESSED_TOPBOTTOM, FALSE);
-		mobjecttracking.SizeToContent();
-		mobjecttracking.DrawBorder(FALSE, FALSE);
-		mobjecttracking.DrawTransparent();
+		mobjecttracking.m_nFlatStyle = CMFCButton::BUTTONSTYLE_NOBORDERS;
+		mobjecttracking.m_bTransparent = TRUE;
+		mobjecttracking.m_bDrawFocus = FALSE;
+		mobjecttracking.SetImage(htbnmp, TRUE, htbnmp);
+		mobjecttracking.SetMouseCursorHand();
 	}
+
+	htbnmp = NULL;
+	m_CImage.Detach();
+
+	if (m_CImage.Load(IDB_PNG_CONFIG)) {
+		htbnmp = m_CImage;
+
+		mbtnconfig.m_nFlatStyle = CMFCButton::BUTTONSTYLE_NOBORDERS;
+		mbtnconfig.m_bTransparent = TRUE;
+		mbtnconfig.m_bDrawFocus = FALSE;
+		mbtnconfig.SetImage(htbnmp, TRUE, htbnmp);
+		mbtnconfig.SetMouseCursorHand();
+	}
+
 
 	//SetWindowPos(&this->wndTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
-	if (!mPreviewCtl.isEnableVideo()) {
-		AfxMessageBox(_T("ÇØ´çÇÏ´Â Ä· ÀåÄ¡°¡ ¾ø½À´Ï´Ù. "));
+	if (!mPreviewCtl.isEnableVideo(m_currentSource)) {
+		AfxMessageBox(_T("í•´ë‹¹í•˜ëŠ” ìº  ì¥ì¹˜ê°€ ì—†ìŠµë‹ˆë‹¤. "));
 	}
 	else {
 		mPreviewCtl.initObjectTracking();
 		mPreviewCtl.startMyTimer(1);
 	}
 
-	return TRUE;  // Æ÷Ä¿½º¸¦ ÄÁÆ®·Ñ¿¡ ¼³Á¤ÇÏÁö ¾ÊÀ¸¸é TRUE¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
+	return TRUE;  // í¬ì»¤ìŠ¤ë¥¼ ì»¨íŠ¸ë¡¤ì— ì„¤ì •í•˜ì§€ ì•Šìœ¼ë©´ TRUEë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
 }
 
 void CsjplabMFCObjectTrackingDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -176,23 +317,23 @@ void CsjplabMFCObjectTrackingDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 	else
 	{
-		CDialogEx::OnSysCommand(nID, lParam);
+		CBkDialogST::OnSysCommand(nID, lParam);
 	}
 }
 
-// ´ëÈ­ »óÀÚ¿¡ ÃÖ¼ÒÈ­ ´ÜÃß¸¦ Ãß°¡ÇÒ °æ¿ì ¾ÆÀÌÄÜÀ» ±×¸®·Á¸é
-//  ¾Æ·¡ ÄÚµå°¡ ÇÊ¿äÇÕ´Ï´Ù.  ¹®¼­/ºä ¸ğµ¨À» »ç¿ëÇÏ´Â MFC ÀÀ¿ë ÇÁ·Î±×·¥ÀÇ °æ¿ì¿¡´Â
-//  ÇÁ·¹ÀÓ¿öÅ©¿¡¼­ ÀÌ ÀÛ¾÷À» ÀÚµ¿À¸·Î ¼öÇàÇÕ´Ï´Ù.
+// ëŒ€í™” ìƒìì— ìµœì†Œí™” ë‹¨ì¶”ë¥¼ ì¶”ê°€í•  ê²½ìš° ì•„ì´ì½˜ì„ ê·¸ë¦¬ë ¤ë©´
+//  ì•„ë˜ ì½”ë“œê°€ í•„ìš”í•©ë‹ˆë‹¤.  ë¬¸ì„œ/ë·° ëª¨ë¸ì„ ì‚¬ìš©í•˜ëŠ” MFC ì‘ìš© í”„ë¡œê·¸ë¨ì˜ ê²½ìš°ì—ëŠ”
+//  í”„ë ˆì„ì›Œí¬ì—ì„œ ì´ ì‘ì—…ì„ ìë™ìœ¼ë¡œ ìˆ˜í–‰í•©ë‹ˆë‹¤.
 
 void CsjplabMFCObjectTrackingDlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // ±×¸®±â¸¦ À§ÇÑ µğ¹ÙÀÌ½º ÄÁÅØ½ºÆ®ÀÔ´Ï´Ù.
+		CPaintDC dc(this); // ê·¸ë¦¬ê¸°ë¥¼ ìœ„í•œ ë””ë°”ì´ìŠ¤ ì»¨í…ìŠ¤íŠ¸ì…ë‹ˆë‹¤.
 
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-		// Å¬¶óÀÌ¾ğÆ® »ç°¢Çü¿¡¼­ ¾ÆÀÌÄÜÀ» °¡¿îµ¥¿¡ ¸ÂÃä´Ï´Ù.
+		// í´ë¼ì´ì–¸íŠ¸ ì‚¬ê°í˜•ì—ì„œ ì•„ì´ì½˜ì„ ê°€ìš´ë°ì— ë§ì¶¥ë‹ˆë‹¤.
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -200,17 +341,17 @@ void CsjplabMFCObjectTrackingDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// ¾ÆÀÌÄÜÀ» ±×¸³´Ï´Ù.
+		// ì•„ì´ì½˜ì„ ê·¸ë¦½ë‹ˆë‹¤.
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
 	{
-		CDialogEx::OnPaint();
+		CBkDialogST::OnPaint();
 	}
 }
 
-// »ç¿ëÀÚ°¡ ÃÖ¼ÒÈ­µÈ Ã¢À» ²ô´Â µ¿¾È¿¡ Ä¿¼­°¡ Ç¥½ÃµÇµµ·Ï ½Ã½ºÅÛ¿¡¼­
-//  ÀÌ ÇÔ¼ö¸¦ È£ÃâÇÕ´Ï´Ù.
+// ì‚¬ìš©ìê°€ ìµœì†Œí™”ëœ ì°½ì„ ë„ëŠ” ë™ì•ˆì— ì»¤ì„œê°€ í‘œì‹œë˜ë„ë¡ ì‹œìŠ¤í…œì—ì„œ
+//  ì´ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•©ë‹ˆë‹¤.
 HCURSOR CsjplabMFCObjectTrackingDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
@@ -261,15 +402,15 @@ void CsjplabMFCObjectTrackingDlg::changeTrackingButton()
 	htbnmp = NULL;
 	m_CImage.Detach();
 
-	if (m_CImage.Load(IDB_PNG_PLUS)) {
+	if (m_CImage.Load(IDB_PNG_TRACKING_NORMAL)) {
 		htbnmp = m_CImage;
 
-		mobjecttracking.SetBitmaps(htbnmp, RGB(255, 255, 255), NULL, RGB(255, 255, 255));
-		mobjecttracking.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
-		mobjecttracking.SetPressedStyle(CButtonST::BTNST_PRESSED_TOPBOTTOM, FALSE);
-		mobjecttracking.SizeToContent();
-		mobjecttracking.DrawBorder(FALSE, FALSE);
-		mobjecttracking.DrawTransparent();
+		mobjecttracking.m_nFlatStyle = CMFCButton::BUTTONSTYLE_NOBORDERS;
+		mobjecttracking.m_bTransparent = TRUE;
+		mobjecttracking.m_bDrawFocus = FALSE;
+		mobjecttracking.SetImage(htbnmp, TRUE, htbnmp);
+		mobjecttracking.SetMouseCursorHand();
+		mobjecttracking.Invalidate();
 	}
 }
 void CsjplabMFCObjectTrackingDlg::OnClickedObjtracking()
@@ -282,15 +423,14 @@ void CsjplabMFCObjectTrackingDlg::OnClickedObjtracking()
 		htbnmp = NULL;
 		m_CImage.Detach();
 
-		if (m_CImage.Load(IDB_PNG_CROSS)) {
+		if (m_CImage.Load(IDB_PNG_TRACKING_PRESSED)) {
 			htbnmp = m_CImage;
 
-			mobjecttracking.SetBitmaps(htbnmp, RGB(255, 255, 255), NULL, RGB(255, 255, 255));
-			mobjecttracking.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
-			mobjecttracking.SetPressedStyle(CButtonST::BTNST_PRESSED_TOPBOTTOM, FALSE);
-			mobjecttracking.SizeToContent();
-			mobjecttracking.DrawBorder(FALSE, FALSE);
-			mobjecttracking.DrawTransparent();
+			mobjecttracking.m_nFlatStyle = CMFCButton::BUTTONSTYLE_NOBORDERS;
+			mobjecttracking.m_bTransparent = TRUE;
+			mobjecttracking.m_bDrawFocus = FALSE;
+			mobjecttracking.SetImage(htbnmp, TRUE, htbnmp);
+			mobjecttracking.SetMouseCursorHand();
 		}
 	}
 	else {
@@ -301,22 +441,23 @@ void CsjplabMFCObjectTrackingDlg::OnClickedObjtracking()
 		htbnmp = NULL;
 		m_CImage.Detach();
 
-		if (m_CImage.Load(IDB_PNG_PLUS)) {
+		if (m_CImage.Load(IDB_PNG_TRACKING_NORMAL)) {
 			htbnmp = m_CImage;
 
-			mobjecttracking.SetBitmaps(htbnmp, RGB(255, 255, 255), NULL, RGB(255, 255, 255));
-			mobjecttracking.SetAlign(CButtonST::ST_ALIGN_OVERLAP, FALSE);
-			mobjecttracking.SetPressedStyle(CButtonST::BTNST_PRESSED_TOPBOTTOM, FALSE);
-			mobjecttracking.SizeToContent();
-			mobjecttracking.DrawBorder(FALSE, FALSE);
-			mobjecttracking.DrawTransparent();
+			mobjecttracking.m_nFlatStyle = CMFCButton::BUTTONSTYLE_NOBORDERS;
+			mobjecttracking.m_bTransparent = TRUE;
+			mobjecttracking.m_bDrawFocus = FALSE;
+			mobjecttracking.SetImage(htbnmp, TRUE, htbnmp);
+			mobjecttracking.SetMouseCursorHand();
 		}
 	}
+
+	mobjecttracking.Invalidate();
 }
 
 void CsjplabMFCObjectTrackingDlg::OnDestroy()
 {
-	CDialogEx::OnDestroy();
+	CBkDialogST::OnDestroy();
 
 	// TODO: Add your message handler code here
 
@@ -324,42 +465,479 @@ void CsjplabMFCObjectTrackingDlg::OnDestroy()
 }
 
 
-void CsjplabMFCObjectTrackingDlg::OnSelchangeComboMethod()
-{
-	// TODO: Add your control notification handler code here
-}
+//void CsjplabMFCObjectTrackingDlg::OnSelchangeComboMethod()
+//{
+//	// TODO: Add your control notification handler code here
+//}
 
 
-void CsjplabMFCObjectTrackingDlg::OnSelchangeComboSource()
-{
-	// TODO: Add your control notification handler code here
-}
+//void CsjplabMFCObjectTrackingDlg::OnSelchangeComboSource()
+//{
+//	// TODO: Add your control notification handler code here
+//}
 
 
 HBRUSH CsjplabMFCObjectTrackingDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
-	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+	HBRUSH hbr = CBkDialogST::OnCtlColor(pDC, pWnd, nCtlColor);
 
-	// TODO:  Change any attributes of the DC here
-	COLORREF red = RGB(0, 0, 0);
-
-	switch (pWnd->GetDlgCtrlID())
-	{
-	case IDC_STATIC_SOURCE:
-		pDC->SetTextColor(RGB(255, 0, 0));
-		pDC->SetBkColor(red);
-	case IDC_STATIC_METHOD:
-		pDC->SetTextColor(RGB(255, 0, 0));
-		pDC->SetBkColor(red);
-	case IDC_COMBO_METHOD:
-		pDC->SetTextColor(RGB(255, 0, 0));
-		//pDC->SetDCBrushColor(RGB(255, 0, 0));
-		//pDC->SetBkMode(TRANSPARENT);
-		pDC->SetBkColor(red);
-	case IDC_COMBO_SOURCE:
-		pDC->SetTextColor(RGB(255, 0, 0));
-		pDC->SetBkColor(red);
-	}
+	//HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+	/*if (pWnd->GetDlgCtrlID() == IDC_STATIC_PIC) {
+		pDC->SetBkColor(RGB(255, 0, 0));
+	}*/
 	// TODO:  Return a different brush if the default is not desired
 	return hbr;
+}
+
+
+void CsjplabMFCObjectTrackingDlg::OnStnClickedPicPreview()
+{
+	// TODO: Add your control notification handler code here
+}
+
+
+//void CsjplabMFCObjectTrackingDlg::OnNcRButtonDblClk(UINT nHitTest, CPoint point)
+//{
+//	// TODO: Add your message handler code here and/or call default
+//
+//	CDialogEx::OnNcRButtonDblClk(nHitTest, point);
+//}
+
+
+void CsjplabMFCObjectTrackingDlg::OnNcPaint()
+{
+	// TODO: Add your message handler code here
+	// Do not call CDialogEx::OnNcPaint() for painting messages
+
+	//CDC* pDC = GetWindowDC();
+
+	////work out the coordinates of the window rectangle,
+	//CRect rect;
+	//GetWindowRect(&rect);
+	//rect.OffsetRect(-rect.left, -rect.top);
+
+	////Draw a single line around the outside
+	//CBrush brush(RGB(255, 0, 0));
+	//pDC->FrameRect(&rect, &brush);
+	//ReleaseDC(pDC);
+
+	//CRect rcWindow;
+	//GetWindowRect(&rcWindow);
+	//rcWindow.OffsetRect(-rcWindow.left, -rcWindow.top);
+
+	//int nX = 0;
+	//int nY = 0;
+	//LONG lStyle = ::GetWindowLong(this->GetSafeHwnd(), GWL_STYLE);
+	//// WS_BORDER ì†ì„±ì´ ì ìš©ë˜ì–´ ìˆëŠëƒ ì—†ëŠëƒì— ë”°ë¼ ë‘ê»˜ ê³„ì‚°
+	//if (lStyle & WS_BORDER)
+	//{
+	//	nX = GetSystemMetrics(SM_CXSIZEFRAME);
+	//	nY = GetSystemMetrics(SM_CYSIZEFRAME);
+	//}
+	//else
+	//{
+	//	nX = GetSystemMetrics(SM_CXSIZEFRAME) - GetSystemMetrics(SM_CXBORDER);
+	//	nY = GetSystemMetrics(SM_CYSIZEFRAME) - GetSystemMetrics(SM_CYBORDER);
+	//}
+
+	//CDC* pDC = GetWindowDC();
+	//// í…Œë‘ë¦¬ ì˜ì—­ë§Œì„ ìœ„í•´ ê°€ìš´ë° ì˜ì—­ ì œì™¸
+	//pDC->ExcludeClipRect(nX, nY, rcWindow.right - nX, rcWindow.bottom - nY);
+	//{
+	//	// í…Œë‘ë¦¬ì— ê·¸ë¦´ ë‚´ìš©
+	//	pDC->FillSolidRect(&rcWindow, RGB(255, 0, 0));
+	//}
+	//ReleaseDC(pDC);
+
+	//CWindowDC dc(this);
+
+	//CRect rc2, rc1;
+	//GetWindowRect(&rc2);
+
+	//int x, y;
+	//// Compute the caption bar's origin. This window has a system box
+	//// a minimize box, a maximize box, and has a resizeable frame
+	//x = GetSystemMetrics(SM_CXSIZE) +
+	//	GetSystemMetrics(SM_CXBORDER) +
+	//	GetSystemMetrics(SM_CXFRAME);
+	//y = GetSystemMetrics(SM_CYFRAME);
+
+	//rc1.left = x;
+	//rc1.top = y;
+
+	//// 2*x gives twice the bitmap+border+frame size. Since there are
+	//// only two bitmaps, two borders, and one frame at the end of the
+	//// caption bar, subtract a frame to account for this.
+	//rc1.right = rc2.right - rc2.left - 2 * x -
+	//	GetSystemMetrics(SM_CXFRAME);
+	//rc1.bottom = GetSystemMetrics(SM_CYSIZE);
+	//// Render the caption. Use the active caption color as the text
+	//// background.
+	//dc.SetBkColor(GetSysColor(0x000000));
+	//dc.SetTextColor(0xFF0000);
+	////dc.SetBkMode(TRANSPARENT);
+	//dc.FillSolidRect(&rc1, 0x000000);
+	//dc.DrawText((LPCTSTR)(LPSTR)"Left Justified Caption", -1,
+	//	(LPRECT)&rc1, DT_LEFT);
+
+	// If you only change the menu bar, let the framework draw 
+	// the window first
+	Default();
+
+	// To accesses the entire screen area of a CWnd 
+	// (both client and nonclient areas).
+	CWindowDC dc(this);
+
+	CRect rc;
+	GetWindowRect(rc);
+
+	// Size of menu bar (non-client area) is smaller
+	rc.bottom = GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYFRAME);
+
+	// Compute color increment
+	double decrement = (double)(LIGHT_COLOR - DARK_COLOR) / rc.Width();
+
+	// Draw menu bar
+	for (int i = 2; i < rc.Width() - 2; i++)
+	{
+		double color;
+		CPen* oldPen;
+		color = LIGHT_COLOR - decrement * (double)i;
+		CPen pen(PS_SOLID, 1, RGB(0, 0, (int)color));
+		dc.MoveTo(i, 1);
+		oldPen = dc.SelectObject(&pen);
+		dc.LineTo(i, rc.bottom - 1);
+		dc.SelectObject(oldPen);
+	}
+
+	// Area for buttons
+	CRect closeRect;
+	closeRect.left = rc.right - rc.left - 20;
+	closeRect.top = GetSystemMetrics(SM_CYFRAME);
+	closeRect.right = rc.right - rc.left - 5;
+	closeRect.bottom = GetSystemMetrics(SM_CYSIZE);
+
+	// Put the close button on the caption
+	dc.DrawFrameControl(closeRect,
+		DFC_CAPTION,
+		DFCS_CAPTIONCLOSE);
+
+	// Save button position
+	m_rcClose = closeRect;
+	
+}
+
+
+
+BOOL CsjplabMFCObjectTrackingDlg::OnNcActivate(BOOL bActive)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	//if (!bActive)
+	//{
+	//	CBkDialogST::OnNcActivate(bActive);
+	//	// Add code here to draw caption when window is inactive.
+	//	return TRUE;
+
+	//	// Fall through if wParam == TRUE, i.e., window is active. Â  Â  
+	//}
+
+	OnNcPaint();
+	return TRUE;
+
+	//return CBkDialogST::OnNcActivate(bActive);
+}
+
+DWORD CsjplabMFCObjectTrackingDlg::HitTest(CPoint pt)
+{
+	// Check for buttons
+	CRect rect = m_rcClose;
+	if (rect.PtInRect(pt))
+		return (DWORD)DHT_CLOSE;
+	else
+		return (DWORD)DHT_CAPTION;
+}
+
+LRESULT CsjplabMFCObjectTrackingDlg::OnNcHitTest(CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	//return CBkDialogST::OnNcHitTest(point);
+
+	if (this != GetCapture())
+		return CDialog::OnNcHitTest(point); // The default handler
+
+											// Coords are relative to screen
+	CPoint pt = point;
+	// Convert for relative to client area
+	ScreenToClient(&pt);
+	// Adjust for client area
+	pt.y += GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYFRAME);
+	pt.x += 5;
+
+	// Now test for button
+	DWORD hitTest = HitTest(pt);
+
+	if (hitTest == m_LastHit)
+		return CDialog::OnNcHitTest(point);
+
+	m_LastHit = hitTest;
+
+	UINT pushed = 0;
+	if (m_ButtonDown == hitTest)
+		pushed = DFCS_PUSHED;
+
+	CWindowDC dc(this);
+	switch (hitTest)
+	{
+	case DHT_CLOSE:
+	{
+		DrawFrameControl(dc.m_hDC,
+			m_rcClose,
+			DFC_CAPTION,
+			DFCS_CAPTIONCLOSE | pushed);
+	}
+	break;
+	default:
+		DrawFrameControl(dc.m_hDC,
+			m_rcClose,
+			DFC_CAPTION,
+			DFCS_CAPTIONCLOSE);
+		break;
+	}
+	// return value	
+	return hitTest;
+}
+
+
+void CsjplabMFCObjectTrackingDlg::OnNcLButtonDown(UINT nHitTest, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	//CBkDialogST::OnNcLButtonDown(nHitTest, point);
+
+	// Coords are relative to screen
+	CPoint pt = point;
+	// Convert for relative to client area
+	ScreenToClient(&pt);
+	// Adjust for client area
+	pt.y += GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYFRAME);
+	pt.x += 5;
+
+	// Now test for button
+	DWORD hitTest = HitTest(pt);
+
+	switch (hitTest)
+	{
+	case DHT_CLOSE:
+	{
+		CWindowDC dc(this);
+		DrawFrameControl(dc.m_hDC,
+			m_rcClose,
+			DFC_CAPTION,
+			DFCS_CAPTIONCLOSE | DFCS_PUSHED);
+		m_LastHit = hitTest;
+		m_ButtonDown = hitTest;
+		// Set capture for mouse events
+		SetCapture();
+	}
+	break;
+	default:
+		Default();
+		break;
+	}
+}
+
+
+void CsjplabMFCObjectTrackingDlg::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	//CBkDialogST::OnLButtonUp(nFlags, point);
+
+	if (this != GetCapture())
+		return;
+
+	// Coords are relative to window now
+	CPoint pt = point;
+	// Adjust for client area
+	point.y += GetSystemMetrics(SM_CYCAPTION) + GetSystemMetrics(SM_CYFRAME);
+	point.x += 5;
+
+	// Now test for button
+	DWORD hitTest = HitTest(point);
+
+	switch (m_ButtonDown) // Release the pressed button
+	{
+	case DHT_CLOSE:
+	{
+		CWindowDC dc(this);
+
+		DrawFrameControl(dc.m_hDC,
+			m_rcClose,
+			DFC_CAPTION,
+			DFCS_CAPTIONCLOSE);
+	}
+	break;
+	default:
+		break;
+	}
+
+	switch (hitTest)		// Process command if released at on a button
+	{
+	case 1:
+		SendMessage(WM_CLOSE, 0, 0);
+		break;
+	default:
+		break;
+	}
+	m_ButtonDown = 0;
+	// Release mouse capture
+	ReleaseCapture();
+}
+
+
+void CsjplabMFCObjectTrackingDlg::OnClickedBtnCam1()
+{
+	// TODO: Add your control notification handler code here
+	if (m_currentSource != VIDEO_SOURCE_CAM1) {
+		m_currentSource = VIDEO_SOURCE_CAM1;
+
+		m_btnCam1.SetBitmaps(IDB_BMP_CHECK_SELECTED, RGB(255, 0, 255));
+		m_btnCam2.SetBitmaps(IDB_BMP_CHECK_NORMAL, RGB(255, 0, 255));
+		m_btnStream.SetBitmaps(IDB_BMP_CHECK_NORMAL, RGB(255, 0, 255));
+
+		mPreviewCtl.startMyTimer(0);
+		mPreviewCtl.clearObjectTracking();
+		
+		if (!mPreviewCtl.isEnableVideo(m_currentSource)) {
+			AfxMessageBox(_T("í•´ë‹¹í•˜ëŠ” ìº  ì¥ì¹˜ê°€ ì—†ìŠµë‹ˆë‹¤. "));
+		}
+		else {
+			mPreviewCtl.initObjectTracking();
+			mPreviewCtl.startMyTimer(1);
+		}
+
+	}
+}
+
+
+void CsjplabMFCObjectTrackingDlg::OnClickedBtnCam2()
+{
+	// TODO: Add your control notification handler code here
+	if (m_currentSource != VIDEO_SOURCE_CAM2) {
+		m_currentSource = VIDEO_SOURCE_CAM2;
+
+		m_btnCam1.SetBitmaps(IDB_BMP_CHECK_NORMAL, RGB(255, 0, 255));
+		m_btnCam2.SetBitmaps(IDB_BMP_CHECK_SELECTED, RGB(255, 0, 255));
+		m_btnStream.SetBitmaps(IDB_BMP_CHECK_NORMAL, RGB(255, 0, 255));
+
+		if (!mPreviewCtl.isEnableVideo(m_currentSource)) {
+			AfxMessageBox(_T("í•´ë‹¹í•˜ëŠ” ìº  ì¥ì¹˜ê°€ ì—†ìŠµë‹ˆë‹¤. "));
+		}
+		else {
+			mPreviewCtl.initObjectTracking();
+			mPreviewCtl.startMyTimer(1);
+		}
+	}
+
+}
+
+void CsjplabMFCObjectTrackingDlg::OnClickedBtnStream()
+{
+	// TODO: Add your control notification handler code here
+	if (m_currentSource != VIDEO_SOURCE_STREAM) {
+		m_currentSource = VIDEO_SOURCE_STREAM;
+
+		m_btnCam1.SetBitmaps(IDB_BMP_CHECK_NORMAL, RGB(255, 0, 255));
+		m_btnCam2.SetBitmaps(IDB_BMP_CHECK_NORMAL, RGB(255, 0, 255));
+		m_btnStream.SetBitmaps(IDB_BMP_CHECK_SELECTED, RGB(255, 0, 255));
+
+		if (!mPreviewCtl.isEnableVideo(m_currentSource)) {
+			AfxMessageBox(_T("í•´ë‹¹í•˜ëŠ” ìº  ì¥ì¹˜ê°€ ì—†ìŠµë‹ˆë‹¤. "));
+		}
+		else {
+			mPreviewCtl.initObjectTracking();
+			mPreviewCtl.startMyTimer(1);
+		}
+	}
+}
+
+void CsjplabMFCObjectTrackingDlg::OnClickedBtnCmt()
+{
+	// TODO: Add your control notification handler code here
+	mPreviewCtl.m_currentMethod = m_currentMethod = METHOD_CMT;
+
+	m_btnCmt.SetBitmaps(IDB_BMP_CHECK_SELECTED, RGB(255, 0, 255));
+	m_btnTld.SetBitmaps(IDB_BMP_CHECK_NORMAL, RGB(255, 0, 255));
+
+	mPreviewCtl.tracking = FALSE;
+
+	mPreviewCtl.roiStartPoint.x = 0; mPreviewCtl.roiStartPoint.y = 0;
+	mPreviewCtl.roiEndPoint.x = 0; mPreviewCtl.roiEndPoint.y = 0;
+	mPreviewCtl.clearSelectObject();
+
+	htbnmp = NULL;
+	m_CImage.Detach();
+
+	if (m_CImage.Load(IDB_PNG_TRACKING_NORMAL)) {
+		htbnmp = m_CImage;
+
+		//mobjecttracking.m_nFlatStyle = CMFCButton::BUTTONSTYLE_NOBORDERS;
+		//mobjecttracking.m_bTransparent = TRUE;
+		//mobjecttracking.m_bDrawFocus = FALSE;
+		mobjecttracking.SetImage(htbnmp, TRUE, htbnmp);
+		mobjecttracking.Invalidate();
+		//mobjecttracking.SetMouseCursorHand();
+	}
+}
+
+void CsjplabMFCObjectTrackingDlg::OnClickedBtnTld()
+{
+	// TODO: Add your control notification handler code here
+	mPreviewCtl.m_currentMethod = m_currentMethod = METHOD_TLD;
+
+	m_btnCmt.SetBitmaps(IDB_BMP_CHECK_NORMAL, RGB(255, 0, 255));
+	m_btnTld.SetBitmaps(IDB_BMP_CHECK_SELECTED, RGB(255, 0, 255));
+
+	mPreviewCtl.tracking = FALSE;
+
+	mPreviewCtl.roiStartPoint.x = 0; mPreviewCtl.roiStartPoint.y = 0;
+	mPreviewCtl.roiEndPoint.x = 0; mPreviewCtl.roiEndPoint.y = 0;
+	mPreviewCtl.clearSelectObject();
+
+	htbnmp = NULL;
+	m_CImage.Detach();
+
+	if (m_CImage.Load(IDB_PNG_TRACKING_NORMAL)) {
+		htbnmp = m_CImage;
+
+		//mobjecttracking.m_nFlatStyle = CMFCButton::BUTTONSTYLE_NOBORDERS;
+		//mobjecttracking.m_bTransparent = TRUE;
+		//mobjecttracking.m_bDrawFocus = FALSE;
+		mobjecttracking.SetImage(htbnmp, TRUE, htbnmp);
+		mobjecttracking.Invalidate();
+		//mobjecttracking.SetMouseCursorHand();
+	}
+
+}
+
+void CsjplabMFCObjectTrackingDlg::OnClickedBtnDown()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CsjplabMFCObjectTrackingDlg::OnClickedBtnLeft()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CsjplabMFCObjectTrackingDlg::OnClickedBtnRight()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CsjplabMFCObjectTrackingDlg::OnClickedBtnUp()
+{
+	// TODO: Add your control notification handler code here
 }

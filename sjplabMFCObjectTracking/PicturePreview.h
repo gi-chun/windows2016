@@ -47,14 +47,16 @@ public:
 	Size previewSize;
 	Size lastImageSize;
 	int tracking = 0;
+	int previewResized = 0;
 
 	bool cmt_tracking;
+	int m_currentMethod = 0;
 
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	void AdjustAspectImageSize(const Size& imageSize, const Size& destSize, Size& newSize);
 	void DrawPicToHDC(Mat  cvImg, UINT nDlgID, bool bMaintainAspectRatio /* =true*/);
 	int startMyTimer(int pCmdType);
-	int isEnableVideo();
+	int isEnableVideo(int currentSource);
 	int initObjectTracking();
 	int selectObject();
 	int clearObjectTracking();

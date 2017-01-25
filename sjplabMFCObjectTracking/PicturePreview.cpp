@@ -85,10 +85,9 @@ void CPicturePreview::DrawPicToHDC(Mat  cvImg, UINT nDlgID, bool bMaintainAspect
 	HDC  hDC = pDC->GetSafeHdc();
 
 	CRect rect;
-	//GetDlgItem(IDC_PIC_PREVIEW)->GetClientRect(rect);
-	GetClientRect(rect);
-
-	Size winSize(rect.right, rect.bottom);
+	GetWindowRect(&rect);
+	GetParent()->ScreenToClient(&rect);
+	Size winSize(rect.right-rect.left, rect.bottom-rect.top);
 
 	// Calculate the size of the image that
 	// will fit in the control rectangle.
@@ -110,8 +109,18 @@ void CPicturePreview::DrawPicToHDC(Mat  cvImg, UINT nDlgID, bool bMaintainAspect
 		lastImageSize = imageSize;
 	}
 
-	offsetX = (winSize.width - imageSize.width) / 2;
-	offsetY = (winSize.height - imageSize.height) / 2;
+	/*offsetX = (winSize.width - imageSize.width) / 2;
+	offsetY = (winSize.height - imageSize.height) / 2;*/
+	offsetX = 0;
+	offsetY = 0;
+
+	// change preview window size & location
+	if (!previewResized) {
+		//GetParent()
+		//SetWindowPos(&CWnd::wndTopMost, rect.left+offsetX, rect.top+offsetY, imageSize.width, imageSize.height, NULL); //SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER
+		SetWindowPos(NULL, rect.left + offsetX, rect.top + offsetY, imageSize.width, imageSize.height, NULL); //SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER
+		previewResized = 1;
+	}	
 
 	// Resize the source to the size of the destination image if necessary
 	Mat cvImgTmp;
@@ -199,12 +208,15 @@ void CPicturePreview::OnTimer(UINT_PTR nIDEvent)
 
 	if (!skipProcessingOnce && tracking)
 	{
-		main->tld->processImage(frameProcessing);
-
-		if(cmt_tracking){
-		    cv::Mat im_gray;
-		    cvtColor(frameProcessing, im_gray, CV_BGR2GRAY);
-		    cmt.processFrame(im_gray);
+		if (m_currentMethod != METHOD_CMT) {
+			main->tld->processImage(frameProcessing);
+		}
+		else {
+			if (cmt_tracking) {
+				cv::Mat im_gray;
+				cvtColor(frameProcessing, im_gray, CV_BGR2GRAY);
+				cmt.processFrame(im_gray);
+			}
 		}
 	}
 	else
@@ -237,46 +249,50 @@ void CPicturePreview::OnTimer(UINT_PTR nIDEvent)
 		double px = frame.cols / (double)frameProcessing.cols;
 		double py = frame.rows / (double)frameProcessing.rows;
 
-		if (cmt.hasResult && tracking) {
-			for (int i = 0; i < cmt.trackedKeypoints.size(); i++) {
-				//cvCircle(img, cmt.trackedKeypoints[i].first.pt, 3, cv::Scalar(255, 255, 255));
-				CvPoint nPoint = cmt.trackedKeypoints[i].first.pt;
-				nPoint.x = nPoint.x * px; nPoint.y = nPoint.y * py;
-				cv::circle(frame, nPoint, 3, cv::Scalar(255, 255, 255));
+		if (m_currentMethod != METHOD_CMT) {
+			if (main->tld->currBB != NULL)
+			{
+				CvScalar rectangleColor = (confident) ? blue : yellow;
+				CvPoint topleft = cvPoint(main->tld->currBB->x, main->tld->currBB->y);
+				CvPoint bottomRight = cvPoint(main->tld->currBB->x + main->tld->currBB->width, main->tld->currBB->y + main->tld->currBB->height);
+				topleft.x = topleft.x * px; topleft.y = topleft.y * py;
+				bottomRight.x = bottomRight.x * px; bottomRight.y = bottomRight.y * py;
+
+				cv::Rect r = cv::Rect(topleft.x, topleft.y, bottomRight.x - topleft.x, bottomRight.y - topleft.y);
+				cv::rectangle(frame, r, rectangleColor, 2);
+				CvPoint center = cvPoint(r.x + r.width / 2, r.y + r.height / 2);
+				cv::line(frame, cvPoint(center.x - 2, center.y - 2), cvPoint(center.x + 2, center.y + 2), rectangleColor, 2);
+				cv::line(frame, cvPoint(center.x - 2, center.y + 2), cvPoint(center.x + 2, center.y - 2), rectangleColor, 2);
 			}
-		    //cvRectangle(img, cmt.boundingbox.tl(), cmt.boundingbox.br(), Scalar(0,0,255), 1, 4);
-			CvPoint topleft = cvPoint(cmt.boundingbox.x, cmt.boundingbox.y);
-			CvPoint bottomRight = cvPoint(cmt.boundingbox.x + cmt.boundingbox.width, cmt.boundingbox.y + cmt.boundingbox.height);
-			topleft.x = topleft.x * px; topleft.y = topleft.y * py;
-			bottomRight.x = bottomRight.x * px; bottomRight.y = bottomRight.y * py;
-			cv::rectangle(frame, topleft, bottomRight, Scalar(0, 0, 255), 1, 4);
+		}
+		else {
+			if (cmt.hasResult && tracking) {
+				for (int i = 0; i < cmt.trackedKeypoints.size(); i++) {
+					//cvCircle(img, cmt.trackedKeypoints[i].first.pt, 3, cv::Scalar(255, 255, 255));
+					CvPoint nPoint = cmt.trackedKeypoints[i].first.pt;
+					nPoint.x = nPoint.x * px; nPoint.y = nPoint.y * py;
+					cv::circle(frame, nPoint, 3, cv::Scalar(255, 255, 255));
+				}
+				//cvRectangle(img, cmt.boundingbox.tl(), cmt.boundingbox.br(), Scalar(0,0,255), 1, 4);
+				CvPoint topleft = cvPoint(cmt.boundingbox.x, cmt.boundingbox.y);
+				CvPoint bottomRight = cvPoint(cmt.boundingbox.x + cmt.boundingbox.width, cmt.boundingbox.y + cmt.boundingbox.height);
+				topleft.x = topleft.x * px; topleft.y = topleft.y * py;
+				bottomRight.x = bottomRight.x * px; bottomRight.y = bottomRight.y * py;
+				cv::rectangle(frame, topleft, bottomRight, Scalar(0, 0, 255), 1, 4);
 
-			//draw some crosshairs around the object
-			int x, y = 0;
-			x = topleft.x + (bottomRight.x - topleft.x) / 2;
-			y = topleft.y + (bottomRight.y - topleft.y) / 2;
+				//draw some crosshairs around the object
+				int x, y = 0;
+				x = topleft.x + (bottomRight.x - topleft.x) / 2;
+				y = topleft.y + (bottomRight.y - topleft.y) / 2;
 
-			cv::circle(frame, cv::Point(x, y), 10, Scalar(0, 255, 0), 1);
-			cv::line(frame, cv::Point(x, y), cv::Point(x, y - 15), Scalar(0, 255, 0), 1);
-			cv::line(frame, cv::Point(x, y), cv::Point(x, y + 15), Scalar(0, 255, 0), 1);
-			cv::line(frame, cv::Point(x, y), cv::Point(x - 15, y), Scalar(0, 255, 0), 1);
-			cv::line(frame, cv::Point(x, y), cv::Point(x + 15, y), Scalar(0, 255, 0), 1);
+				cv::circle(frame, cv::Point(x, y), 10, Scalar(0, 255, 0), 1);
+				cv::line(frame, cv::Point(x, y), cv::Point(x, y - 15), Scalar(0, 255, 0), 1);
+				cv::line(frame, cv::Point(x, y), cv::Point(x, y + 15), Scalar(0, 255, 0), 1);
+				cv::line(frame, cv::Point(x, y), cv::Point(x - 15, y), Scalar(0, 255, 0), 1);
+				cv::line(frame, cv::Point(x, y), cv::Point(x + 15, y), Scalar(0, 255, 0), 1);
+			}
 		}
 		
-		if (main->tld->currBB != NULL)
-		{
-			CvScalar rectangleColor = (confident) ? blue : yellow;
-			CvPoint topleft = cvPoint(main->tld->currBB->x, main->tld->currBB->y);
-			CvPoint bottomRight = cvPoint(main->tld->currBB->x + main->tld->currBB->width, main->tld->currBB->y + main->tld->currBB->height);
-			topleft.x = topleft.x * px; topleft.y = topleft.y * py;
-			bottomRight.x = bottomRight.x * px; bottomRight.y = bottomRight.y * py;
-
-			cv::Rect r = cv::Rect(topleft.x, topleft.y, bottomRight.x - topleft.x, bottomRight.y - topleft.y);
-			cv::rectangle(frame, r, rectangleColor, 2);
-			CvPoint center = cvPoint(r.x + r.width / 2, r.y + r.height / 2);
-			cv::line(frame, cvPoint(center.x - 2, center.y - 2), cvPoint(center.x + 2, center.y + 2), rectangleColor, 2);
-			cv::line(frame, cvPoint(center.x - 2, center.y + 2), cvPoint(center.x + 2, center.y - 2), rectangleColor, 2);
-		}
 		cv::putText(frame, string, cvPoint(25, 25), 1, 1, white);
 	}
 
@@ -328,7 +344,7 @@ int CPicturePreview::startMyTimer(int pCmdType)
 		SetTimer(MY_TIMER, 30, NULL);
 	}
 	else {
-
+		KillTimer(MY_TIMER);
 	}
 
 	return 0;
@@ -376,31 +392,48 @@ int CPicturePreview::selectObject()
 	roiRect.width = roiRect.width * px;
 	roiRect.height = roiRect.height * py;
 
-	main->tld->selectObject(grey, &roiRect);
+	if (m_currentMethod != METHOD_CMT) {
+		main->tld->selectObject(grey, &roiRect);
+	}
+	else {
+		//cmt tracket init
+		cv::Point2f initTopLeft(roiRect.x, roiRect.y);
+		cv::Point2f initBottomDown(roiRect.x + roiRect.width, roiRect.y + roiRect.height);
+		cmt_tracking = cmt.initialise(grey, initTopLeft, initBottomDown);
+	}
 
-	//cmt tracket init
-	cv::Point2f initTopLeft(roiRect.x, roiRect.y);
-	cv::Point2f initBottomDown(roiRect.x+ roiRect.width, roiRect.y+ roiRect.height);
-	cmt_tracking = cmt.initialise(grey, initTopLeft, initBottomDown);
-	
 	return TRUE;
 }
 
-int CPicturePreview::isEnableVideo()
+int CPicturePreview::isEnableVideo(int currentSource)
 {
 	//String url = "https://devimages.apple.com.edgekey.net/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8";
 	//mVideoCapture.open(0);
 	//mVideoCapture.open("https://devimages.apple.com.edgekey.net/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8");
 	//mVideoCapture.open("151127.mp4");
-
 	//mVideoCapture = new VideoCapture("https://devimages.apple.com.edgekey.net/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8");
 	//mVideoCapture = new VideoCapture("151127.mp4");
-	mVideoCapture = new VideoCapture(1);
-
+	//mVideoCapture = new VideoCapture(0);
 	/*char* video_name;
 	video_name = "768x576.avi";
 	mVideoCapture.open(video_name);*/
 
+	switch (currentSource)
+	{
+	case VIDEO_SOURCE_CAM1:
+		mVideoCapture = new VideoCapture(0);
+		break;
+	case VIDEO_SOURCE_CAM2:
+		mVideoCapture = new VideoCapture(1);
+		break;
+	case VIDEO_SOURCE_STREAM:
+		mVideoCapture = new VideoCapture("https://devimages.apple.com.edgekey.net/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8");
+		break;
+	
+	default:
+		mVideoCapture = new VideoCapture("https://devimages.apple.com.edgekey.net/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8");
+	}
+	
 	if (!mVideoCapture->isOpened())
 		return false;
 	
@@ -415,8 +448,8 @@ int CPicturePreview::clearObjectTracking()
 {
 	delete main;
 	main = NULL;
-	//mVideoCapture.release();
-	//mVideoCapture = NULL;
+	mVideoCapture->release();
+	mVideoCapture = NULL;
 	return TRUE;
 }
 
